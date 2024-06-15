@@ -1,8 +1,9 @@
+// src/components/Navbar.jsx
 import React, { useState, useEffect } from 'react';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ImCross } from "react-icons/im";
 import { FaGithub } from "react-icons/fa";
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Shepherd from 'shepherd.js';
 import { motion } from 'framer-motion';
 import 'shepherd.js/dist/css/shepherd.css';
@@ -10,15 +11,22 @@ import 'shepherd.js/dist/css/shepherd.css';
 const Navbar = () => {
     const [click, setClick] = useState(false);
     const [button, setButton] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsLoggedIn(!!token);
+    }, []);
 
     const handleClick = () => {
         setClick(!click);
-    }
+    };
 
     const closeMobileMenu = () => {
         setClick(false);
-    }
+    };
 
     const showButton = () => {
         if (window.innerWidth <= 760) {
@@ -33,6 +41,12 @@ const Navbar = () => {
             top: 0,
             behavior: 'smooth'
         });
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        navigate('/');
     };
 
     useEffect(() => {
@@ -54,7 +68,7 @@ const Navbar = () => {
         const steps = [
             {
                 id: 'brand',
-                text: 'Welcome to Article Insight!  Let\'s take you on a quick tour.',
+                text: 'Welcome to Article Insight! Let\'s take you on a quick tour.',
                 attachTo: { element: '.text-3xl', on: 'bottom' },
                 buttons: [
                     {
@@ -152,7 +166,7 @@ const Navbar = () => {
             },
             {
                 id: 'features',
-                text: 'Check out our features..',
+                text: 'Check out our features.',
                 attachTo: { element: '#features', on: 'top' },
                 buttons: [
                     {
@@ -233,7 +247,7 @@ const Navbar = () => {
                             </Link>
                         </ul>
                     </div>
-                    <div id="github-link" className=" flex items-center gap-6">
+                    <div id="github-link" className="flex items-center gap-6">
                         <div className='flex justify-center items-center'>
                             <a href="https://github.com/rajesh-adk-137/ArticleInsightGuide/">
                                 <motion.button className='bg-gray-300 hover:bg-gray-400 text-black md:px-5 md:py-2 rounded-md md:flex items-center space-x-2 hidden'
@@ -243,6 +257,26 @@ const Navbar = () => {
                                 </motion.button>
                             </a>
                         </div>
+                        {
+                            isLoggedIn ? (
+                                <motion.button
+                                    className='bg-gray-300 text-black px-4 py-2 rounded-md'
+                                    whileHover={{ scale: 1.1 }}
+                                    onClick={handleLogout}
+                                >
+                                    Logout
+                                </motion.button>
+                            ) : (
+                                <Link to="/auth">
+                                    <motion.button
+                                        className='bg-gray-300 text-black px-4 py-2 rounded-md'
+                                        whileHover={{ scale: 1.1 }}
+                                    >
+                                        Login
+                                    </motion.button>
+                                </Link>
+                            )
+                        }
                         {
                             click ? (
                                 <ImCross onClick={handleClick} name="menu" className="text-3xl cursor-pointer md:hidden" />
@@ -260,10 +294,7 @@ const Navbar = () => {
                 </button>}
             </header>
         </>
-    )
+    );
 }
 
 export default Navbar;
-
-
-

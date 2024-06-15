@@ -1,20 +1,115 @@
-from fastapi import FastAPI, Form, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, status, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, Session
+from llmware.models import ModelCatalog
+from passlib.context import CryptContext
+from jose import JWTError, jwt
+from datetime import datetime, timedelta
+from pydantic import BaseModel
 from bs4 import BeautifulSoup
 import requests
-from llmware.models import ModelCatalog
 from urllib.parse import urlparse
+import secrets
 
+
+# Database setup
+DATABASE_URL = "sqlite:///./test.db"
+Base = declarative_base()
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Models
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+
+Base.metadata.create_all(bind=engine)
+
+# Utility functions
+SECRET_KEY = secrets.token_hex(32)
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict, expires_delta: timedelta = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+# FastAPI setup
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
     allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Dependency
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# Pydantic models
+class UserCreate(BaseModel):
+    username: str
+    email: str
+    password: str
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+# Authentication routes
+@app.post("/signup", response_model=Token)
+async def signup(user: UserCreate, db: Session = Depends(get_db)):
+    hashed_password = get_password_hash(user.password)
+    db_user = User(username=user.username, email=user.email, hashed_password=hashed_password)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    
+    access_token = create_access_token(data={"sub": db_user.email})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@app.post("/login", response_model=Token)
+async def login(user: UserLogin, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.email == user.email).first()
+    if not db_user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    
+    if not verify_password(user.password, db_user.hashed_password):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    
+    access_token = create_access_token(data={"sub": db_user.email})
+    return {"access_token": access_token, "token_type": "bearer"}
 
 # Generalized scraping function
 def scrape_article(url):
@@ -124,11 +219,10 @@ def scrape_medium_article(url):
     else:
         return None, f'Error: Unable to fetch the article. Status code: {response.status_code}', '', ''
 
-# LLMware Models
+# LLMware Models (assuming these functions are defined and working)
 def get_summary(text):
     if text is not None:
         slim_model = ModelCatalog().load_model("slim-summary-tool") 
-        #"llmware/slim-summary" <-use this model for better answers, but it is slow.
         response = slim_model.function_call(text, params=["key points (3)"], function="summarize")
         return response["llm_response"]
     else:
@@ -159,13 +253,12 @@ def get_topic(text):
         return "Invalid text"
 
 def get_answer(text, question):
-    if text is not None:
-        questions = '"' + question + " (explain)" + '"' 
-        slim_model = ModelCatalog().load_model("slim-boolean-tool")
-        response = slim_model.function_call(text, params=[questions], function="boolean")
+    if text is not None and question is not None:
+        slim_model = ModelCatalog().load_model("slim-qa-tool")
+        response = slim_model.function_call(text, params=["answer"], function="answer")
         return response["llm_response"]
     else:
-        return "Invalid text"
+        return "Invalid text or question"
 
 @app.post("/get_all/")
 async def get_all(url: str = Form(...)):
@@ -187,7 +280,6 @@ async def get_all(url: str = Form(...)):
 @app.post("/get_answer/")
 async def get_answer_route(url: str = Form(...), question: str = Form(...)):
     title, content, comments, likes = scrape_article(url)
-    # print(url)
     if title:
         text = '"' + content + '"'
 

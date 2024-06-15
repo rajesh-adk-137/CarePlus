@@ -3,6 +3,7 @@ import LandingPage from "./pages/LandingPage";
 import HomePage from "./pages/HomePage";
 import Analyze from "./pages/Analyze";
 import AboutPage from "./pages/AboutPage";
+import AuthPage from './pages/AuthPage';
 
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
           <Route exact path="/home" element={<HomePage/>} />
           <Route exact path="/analyze" element={<Analyze/>} />
           <Route exact path="/about" element={<AboutPage/>} />
+          <Route exact path="/auth" element={<AuthPage />} />
         </Routes>
       </Router>
     </>

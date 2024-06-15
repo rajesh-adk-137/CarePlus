@@ -1,14 +1,24 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import heroImage from "../assets/images/learning-with-ai.png";
-// import 'shepherd.js/dist/css/shepherd.css';
 import { motion } from 'framer-motion';
 
 const HeroSection = () => {
     const gradientStyle = {
         background: 'rgb(0,85,184)',
         background: 'radial-gradient(circle, rgb(0,85,184,1) 0%, rgba(0,0,0,1) 55%)'
+    };
+
+    const navigate = useNavigate();
+
+    const handleTryItNow = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/home');
+        } else {
+            navigate('/auth');
+        }
     };
 
     return (
@@ -42,7 +52,7 @@ const HeroSection = () => {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 1.2, delay: 0.5 }}
                     >
-                        Transform your reading experience with ArticleInsignt – an innovative web app that summarizes online articles, performs sentiment analysis, extracts keywords, and lets you ask questions related to the content.
+                        Transform your reading experience with ArticleInsight – an innovative web app that summarizes online articles, performs sentiment analysis, extracts keywords, and lets you ask questions related to the content.
                     </motion.p>
                     <motion.div
                         className='hero-buttons flex flex-row gap-10'
@@ -50,14 +60,15 @@ const HeroSection = () => {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 1.2, delay: 0.8 }}
                     >
-                        <Link to='/home'>
-                            <motion.button className='bg-[#171a8d] text-[#5ce1ff] font-bold px-5 py-3 rounded-lg flex items-center justify-center space-x-2 transition duration-300 ease-in-out hover:bg-[#0f0e69] hover:shadow-lg'
-                                whileHover={{ scale: 1.2, textShadow: "0px 0px 8px", borderShadow: "0px 0px 8px" }}
-                                transition={{ duration: 0.1 }}>
-                                <span>TRY IT NOW</span>
-                                <MdKeyboardDoubleArrowRight className="text-xl" />
-                            </motion.button>
-                        </Link>
+                        <button
+                            onClick={handleTryItNow}
+                            className='bg-[#171a8d] text-[#5ce1ff] font-bold px-5 py-3 rounded-lg flex items-center justify-center space-x-2 transition duration-300 ease-in-out hover:bg-[#0f0e69] hover:shadow-lg'
+                            whileHover={{ scale: 1.2, textShadow: "0px 0px 8px", borderShadow: "0px 0px 8px" }}
+                            transition={{ duration: 0.1 }}
+                        >
+                            <span>TRY IT NOW</span>
+                            <MdKeyboardDoubleArrowRight className="text-xl" />
+                        </button>
                         <a href="https://quine.sh/repo/rajesh-adk-137-ArticleInsightGuide-808910229">
                             <motion.button className='bg-[#4fe331] text-black font-bold px-5 py-3 rounded-lg flex items-center justify-center space-x-2 transition duration-300 ease-in-out hover:bg-[#3fb427] hover:shadow-lg'
                                 whileHover={{ scale: 1.2, borderShadow: "0px 0px 2px" }}
@@ -92,5 +103,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
-
