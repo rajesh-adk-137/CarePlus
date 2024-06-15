@@ -18,7 +18,7 @@ const HomePage = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      navigate('/auth');
+      navigate('/home'); // navigate('/auth');
     }
   }, [navigate]);
 
