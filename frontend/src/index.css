@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Shepherd Theme Dark */
+.shepherd-element.shepherd-theme-dark {
+    background: linear-gradient(to bottom right, #1e4e4e, #1a3f3f);
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    font-family: 'Roboto', sans-serif;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.shepherd-element.shepherd-theme-dark .shepherd-header {
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 10px 10px 0 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.shepherd-element.shepherd-theme-dark .shepherd-text {
+    color: #ebf0f2;
+    padding: 1rem 1.5rem;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.shepherd-element.shepherd-theme-dark .shepherd-footer {
+    padding: 0 1rem 1rem;
+}
+
+.shepherd-element.shepherd-theme-dark .shepherd-footer .shepherd-button {
+    background-color: #ffffff;
+    color: #1e4e4e;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shepherd-element.shepherd-theme-dark .shepherd-footer .shepherd-button:hover {
+    background-color: #f2f2f2;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.shepherd-element.shepherd-theme-dark .shepherd-footer .shepherd-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+.shepherd-element.shepherd-theme-dark .shepherd-footer .shepherd-button.shepherd-button-secondary {
+    background-color: transparent;
+    color: #fff;
+}
+
+.shepherd-element.shepherd-theme-dark .shepherd-footer .shepherd-button.shepherd-button-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.shepherd-element.shepherd-theme-dark .shepherd-header .shepherd-cancel-icon {
+    color: #fff;
+    font-size: 1.5rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transition: color 0.3s ease;
+}
+
+.shepherd-element.shepherd-theme-dark .shepherd-header .shepherd-cancel-icon:hover {
+    color: #f2f2f2;
+}
+
+@media (max-width: 768px) {
+    .shepherd-element.shepherd-theme-dark {
+        font-size: 0.9rem;
+    }
+
+    .shepherd-element.shepherd-theme-dark .shepherd-text {
+        padding: 0.8rem 1rem;
+    }
+
+    .shepherd-element.shepherd-theme-dark .shepherd-footer .shepherd-button {
+        padding: 0.4rem 0.8rem;
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
