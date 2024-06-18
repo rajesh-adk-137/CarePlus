@@ -1,18 +1,14 @@
-version: "3.8"
+version: '3.7'
 
 services:
   fastapi:
     build: .
     ports:
       - "8000:8000"
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      SECRET_KEY: ${SECRET_KEY}
-      OPAL_SERVER_URL: ${OPAL_SERVER_URL}
-      OPA_SERVER_URL: ${OPA_SERVER_URL}
+    volumes:
+      - .:/app
     depends_on:
       - opa
-      - opal_server
 
   opa:
     image: openpolicyagent/opa:latest
@@ -20,73 +16,4 @@ services:
       - "8181:8181"
     volumes:
       - ./policies:/policies
-    command: ["run", "--server"]
-
-  opal_server:
-    image: permitio/opal-server:latest
-    environment:
-      OPAL_BROADCAST_URI: postgres://postgres:postgres@broadcast_channel:5432/postgres
-      UVICORN_NUM_WORKERS: 4
-      OPAL_POLICY_REPO_URL: https://github.com/permitio/opal-example-policy-repo
-      OPAL_POLICY_REPO_POLLING_INTERVAL: 30
-      OPAL_DATA_CONFIG_SOURCES: '{"config":{"entries":[{"url":"http://opal_server:7002/policy-data","topics":["policy_data"],"dst_path":"/static"}]}}'
-      OPAL_LOG_FORMAT_INCLUDE_PID: "true"
-    ports:
-      - "7002:7002"
-    depends_on:
-      - broadcast_channel
-
-  opal_client:
-    image: permitio/opal-client:latest
-    environment:
-      OPAL_SERVER_URL: http://opal_server:7002
-      OPAL_LOG_FORMAT_INCLUDE_PID: "true"
-      OPAL_INLINE_OPA_LOG_FORMAT: http
-    ports:
-      - "7766:7000"
-    depends_on:
-      - opal_server
-    command: sh -c "./wait-for.sh opal_server:7002 --timeout=20 -- ./start.sh"
-
-  broadcast_channel:
-    image: postgres:latest
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
-
-
-
-
-# version: "3.8"
-
-# services:
-#   fastapi:
-#     build: .
-#     ports:
-#       - "8000:8000"
-#     environment:
-#       DATABASE_URL: ${DATABASE_URL}
-#       SECRET_KEY: ${SECRET_KEY}
-#       OPAL_SERVER_URL: ${OPAL_SERVER_URL}
-#       OPA_SERVER_URL: ${OPA_SERVER_URL}
-#     depends_on:
-#       - opa
-#       - opal-server
-
-#   opa:
-#     image: openpolicyagent/opa:latest
-#     ports:
-#       - "8181:8181"
-#     volumes:
-#       - ./policies:/policies
-#     command: ["run", "--server", "--config-file=/policies/authz.rego"]
-
-#   opal-server:
-#     image: opalserver/opal-server:latest
-#     ports:
-#       - "7002:7002"
-#     environment:
-#       OPA_SERVER_URL: ${OPA_SERVER_URL}
+    command: ["run", "--server", "--watch", "/policies"]

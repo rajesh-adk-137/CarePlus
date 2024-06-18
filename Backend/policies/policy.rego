@@ -11,3 +11,9 @@ allow {
     input.action == "read"
     input.resource == "article"
 }
+
+allow {
+    input.user.role == "premium_user"
+    input.action == "read"
+    input.resource == "answer"
+}

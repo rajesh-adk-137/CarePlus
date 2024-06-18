@@ -32,7 +32,7 @@ def get_topic(text):
     else:
         return "Invalid text"
 
-def get_answer_route(text, question):
+def get_answer(text, question):
     if text is not None:
         questions = '"' + question + " (explain)" + '"' 
         slim_model = ModelCatalog().load_model("slim-boolean-tool")
