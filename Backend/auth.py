@@ -50,6 +50,11 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     return encoded_jwt
 
 async def signup(user: UserCreate, db: Session):
+    # Check if the user already exists
+    existing_user = db.query(User).filter(User.email == user.email).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
     hashed_password = get_password_hash(user.password)
     db_user = User(username=user.username, email=user.email, hashed_password=hashed_password, role=user.role)
     db.add(db_user)
