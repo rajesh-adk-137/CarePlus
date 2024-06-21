@@ -1,17 +1,17 @@
-import time
-import requests
 from fastapi import FastAPI, Depends, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from auth import UserCreate, UserLogin, Token, signup, login, get_db, get_current_user
-from database import User  # Import User model
-from scraping import scrape_article
-from llmwar import get_summary, get_tags, get_sentiment, get_topic, get_answer
+from database import User
+import requests
 import os
 from dotenv import load_dotenv
+import google.generativeai as genai
 
+# Load environment variables
 load_dotenv()
+
 app = FastAPI()
 
 origins = [
@@ -27,7 +27,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 def check_permissions(input_data):
     try:
         response = requests.post("http://opal_client:8181/v1/data/authz/allow", json={"input": input_data})
@@ -38,7 +37,6 @@ def check_permissions(input_data):
         print(f"Error checking permissions: {e}")
         return False
 
-
 @app.post("/signup", response_model=Token)
 async def signup_route(user: UserCreate, db: Session = Depends(get_db)):
     return await signup(user, db)
@@ -47,45 +45,43 @@ async def signup_route(user: UserCreate, db: Session = Depends(get_db)):
 async def login_route(user: UserLogin, db: Session = Depends(get_db)):
     return await login(user, db)
 
-@app.post("/get_all/")
-async def get_all(url: str = Form(...), current_user: User = Depends(get_current_user)):
+@app.post("/submit_symptoms")
+async def submit_symptoms(
+    illness: str = Form(...),
+    symptoms: str = Form(...),
+    duration: str = Form(...),
+    feeling: int = Form(...),
+    current_user: User = Depends(get_current_user)
+):
     input_data = {
         "user": {"role": current_user.role},
-        "action": "read",
-        "resource": "article"
-    }
-    print("Input data sent to OPA:", input_data)
-    if not check_permissions(input_data):
-        raise HTTPException(status_code=403, detail="Not authorized to access this resource")
-
-    title, content, comments, likes = scrape_article(url)
-    if title:
-        text = '"' + content + '"'
-        summary = "dummy_summary"
-        tags = "dummy_tags"
-        sentiment = "dummy_sentiment"
-        topic = "dummy_topic"
-        return JSONResponse({"summary": summary, "tags": tags, "sentiment": sentiment, "topic": topic})
-    else:
-        raise HTTPException(status_code=400, detail="Error scraping the article.")
-
-@app.post("/get_answer/")
-async def get_answer_route(url: str = Form(...), question: str = Form(...), current_user: User = Depends(get_current_user)):
-    input_data = {
-        "user": {"role": current_user.role},
-        "action": "read",
-        "resource": "answer"
+        "action": "submit",
+        "resource": "symptoms"
     }
     if not check_permissions(input_data):
-        raise HTTPException(status_code=403, detail="Not authorized to access this resource")
+        pass
+        # raise HTTPException(status_code=403, detail="Not authorized to submit symptoms")
+    
+    # Use Gemini AI to classify severity
+    severity = await classify_severity_with_gemini(illness, symptoms, duration, feeling)
+    print("good")
+    print(severity)
+    return JSONResponse({"severity": severity})
 
-    title, content, comments, likes = scrape_article(url)
-    if title:
-        text = '"' + content + '"'
+async def classify_severity_with_gemini(illness, symptoms, duration, feeling):
+    prompt = f"""
+    Given the following patient information:
+    Illness: {illness}
+    Symptoms: {symptoms}
+    Duration: {duration}
+    Pain Rating: {feeling}
+    Classify the severity of the condition into one of the following categories: mild, severe, extreme.
+    """
+    
+    api_key = os.getenv("API_KEY")
+    genai.configure(api_key=api_key)
+    model=genai.GenerativeModel('gemini-1.5-flash')
+    response=model.generate_content(prompt)
+    return response.text
 
-        if not question:
-            raise HTTPException(status_code=400, detail="Question parameter is required for get_answer function")
-
-        return JSONResponse({"answer": "answer"})
-    else:
-        raise HTTPException(status_code=400, detail="Error scraping the article.")
+# You can define other routes here based on your requirements
