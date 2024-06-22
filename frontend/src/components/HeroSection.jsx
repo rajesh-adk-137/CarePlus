@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-import heroImage from "../assets/images/learning-with-ai.png";
+import heroImage from "../assets/images/learning-with-ai.png"; // Update with an appropriate image
 import { motion } from 'framer-motion';
 
 const HeroSection = () => {
@@ -36,7 +36,7 @@ const HeroSection = () => {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 1.2, delay: 0.5 }}
                     >
-                        AI-POWERED TOOL
+                        AI-POWERED HEALTH ASSISTANCE
                     </motion.h1>
                     <motion.h1
                         className='hero-title text-5xl md:text-8xl font-bold my-3'
@@ -44,7 +44,7 @@ const HeroSection = () => {
                         animate={{ opacity: 1, fontSize: 50, x: 15, y: 20 }}
                         transition={{ delay: 0.5, duration: 0.5 }}
                     >
-                        ARTICLE ANALYZER
+                        HEALTHCARE INSIGHT
                     </motion.h1>
                     <motion.p
                         className='hero-description text-xl md:text-2xl text-[#aaabc4] my-10'
@@ -52,7 +52,7 @@ const HeroSection = () => {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 1.2, delay: 0.5 }}
                     >
-                        Transform your reading experience with ArticleInsight – an innovative web app that summarizes online articles, performs sentiment analysis, extracts keywords, and lets you ask questions related to the content.
+                        Transform your health management with HealthCareInsight – an innovative app that monitors your health metrics, offers personalized insights, and provides expert advice.
                     </motion.p>
                     <motion.div
                         className='hero-buttons flex flex-row gap-10'

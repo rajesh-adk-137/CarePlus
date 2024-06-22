@@ -12,10 +12,12 @@ const FillUp = () => {
   const [duration, setDuration] = useState(0);
   const [feeling, setFeeling] = useState(5);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when the form is submitted
     try {
       setError('');
       const token = localStorage.getItem('token');
@@ -25,9 +27,9 @@ const FillUp = () => {
       formData.append('symptoms', symptoms);
       formData.append('duration', duration);
       formData.append('feeling', feeling);
-  
+
       const response = await axios.post(
-        'http://localhost:8000/submit_symptoms',``
+        'http://localhost:8000/submit_symptoms',
         formData,
         {
           headers: {
@@ -36,15 +38,16 @@ const FillUp = () => {
           },
         }
       );
-  
+
       if (response.status === 200) {
-        const { symptoms_analysis, severity, immediate_remedies, avoid,doctor } = response.data;
-        console.log(response)
-        console.log(symptoms_analysis, severity, immediate_remedies, avoid,doctor)
-        navigate(`/response`, { state: { symptoms_analysis, severity, immediate_remedies, avoid,doctor  } });
+        const responseData = JSON.parse(response.data.response);
+        console.log(responseData)
+        navigate(`/response`, { state: { responseData } });
       }
     } catch (err) {
       setError('Failed to submit symptoms. Please try again.');
+    } finally {
+      setLoading(false); // Set loading to false after the request is finished
     }
   };
 
@@ -126,10 +129,21 @@ const FillUp = () => {
             <button
               type="submit"
               className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-500"
+              disabled={loading} // Disable button when loading
             >
-              Submit
+              {loading ? 'Submitting...' : 'Submit'}
             </button>
           </form>
+          {loading && (
+            <motion.div
+              className="flex justify-center items-center mt-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="loader">Loading Response...</div>
+            </motion.div>
+          )}
         </div>
       </motion.div>
       <Footer />

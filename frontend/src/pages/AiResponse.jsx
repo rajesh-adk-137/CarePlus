@@ -1,52 +1,74 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import CssBaseline from '@mui/material/CssBaseline';
+import { Box, Container, Typography } from '@mui/material';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import DoctorsList from '../components/DoctorsList';
+import CombinedResponse from '../components/CombinedResponse'; 
+import ExtremeResponse from '../components/ExtremeResponse'; 
 
 const AiResponse = () => {
   const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const role =  'severe';//queryParams.get('role');
+  const navigate = useNavigate();
+  const { responseData } = location.state || {};
+  const severity = responseData?.severity;
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('You are not logged in.');
+      navigate('/');
+    }
+  }, [navigate]);
 
   const renderContent = () => {
-    if (role === 'mild') {
-      return <div>Mild condition: Suggestions and remedies will be displayed here.</div>;
-    } else if (role === 'severe') {
+    if (!responseData) {
+      return <Typography>Loading error.Try resubmitting the form</Typography>;
+    }
+
+    if (severity === 'mild') {
+      return <CombinedResponse responseData={responseData} />;
+    } else if (severity === 'severe') {
       return (
-        <div>
-          Severe condition: Suggestions, remedies, and list of doctors will be displayed here.
-          <DoctorsList />
-        </div>
+        <>
+          <CombinedResponse responseData={responseData} />
+          <Box mt={4}>
+            <DoctorsList responseData={responseData} />
+          </Box>
+        </>
       );
-    } else if (role === 'extreme') {
+    } else if (severity === 'extreme') {
       return (
-        <div>
-          Extreme condition: Immediate actions, call ambulance, and contact doctor information will be displayed here.
-          <DoctorsList />
-        </div>
+        <>
+          <ExtremeResponse responseData={responseData} />
+          <Box mt={4}>
+            <DoctorsList responseData={responseData} />
+          </Box>
+        </>
       );
     } else {
-      return <div>Unknown condition.</div>;
+      return <Typography>Unknown condition.</Typography>;
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100 text-black">
-      <div className="bg-black text-white">
+    <Box className="min-h-screen flex flex-col bg-gray-100 text-black">
+      <CssBaseline />
+      <Box className="bg-black text-white">
         <Navbar />
-      </div>
-      <div className="flex-grow flex items-center justify-center mt-20">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full">
-          <h2 className="text-2xl font-bold mb-6">AI Response</h2>
+      </Box>
+      <Container maxWidth="lg" className="flex-grow mt-20">
+        <Box className="bg-white rounded-lg shadow-lg p-8">
+          <Typography variant="h4" component="h2" gutterBottom>
+            AI Response
+          </Typography>
           {renderContent()}
-        </div>
-      </div>
+        </Box>
+      </Container>
       <Footer />
-    </div>
+    </Box>
   );
 };
 
 export default AiResponse;
-
-

@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import Shepherd from 'shepherd.js';
-import 'shepherd.js/dist/css/shepherd.css';
 
 export default function AboutPage() {
     const smoothScrollTo = (element) => {
@@ -16,103 +14,6 @@ export default function AboutPage() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    useEffect(() => {
-        const tour = new Shepherd.Tour({
-            useModalOverlay: true,
-            exitOnEsc: true,
-            keyboardNavigation: true,
-
-            defaultStepOptions: {
-                classes: 'shepherd-theme-dark',
-                scrollTo: { behavior: 'smooth', block: 'center' }
-            }
-        });
-
-        const steps = [
-            {
-                id: 'article-sum',
-                text: 'Here you can see the main feature of our app: Article Summary.',
-                attachTo: { element: '#article-sum', on: 'bottom' },
-                buttons: [
-                    {
-                        text: 'next',
-                        action: () => {
-                            tour.next();
-                        }
-                    }
-                ]
-            },
-            {
-                id: 'key-features',
-                text: 'These are the additional features our app offers.',
-                attachTo: { element: '.key-features', on: 'bottom' },
-                buttons: [
-                    {
-                        text: 'back',
-                        action: tour.back
-                    },
-                    {
-                        text: 'next',
-                        action: () => {
-                            tour.next();
-                        }
-                    }
-                ]
-            },
-            {
-                id: 'benefits',
-                text: 'Discover the benefits of using our app.',
-                attachTo: { element: '.benefits', on: 'top' },
-                buttons: [
-                    {
-                        text: 'back',
-                        action: tour.back
-                    },
-                    {
-                        text: 'next',
-                        action: () => {
-                            tour.next();
-                        }
-                    }
-                ]
-            },
-            {
-                id: 'how-it-works',
-                text: 'Learn how our app works.',
-                attachTo: { element: '.how-it-works', on: 'top' },
-                buttons: [
-                    {
-                        text: 'back',
-                        action: tour.back
-                    },
-                    {
-                        text: 'end',
-                        action: () => {
-                            scrollToTop();
-                            tour.complete();
-                        }
-                    }
-                ]
-            }
-        ];
-
-        steps.forEach(step => {
-            tour.addStep(step);
-        });
-
-        const startTour = () => {
-            tour.start();
-        };
-
-        const startTourButton = document.getElementById('start-tour');
-        startTourButton.addEventListener('click', startTour);
-
-        return () => {
-            startTourButton.removeEventListener('click', startTour);
-            tour.complete();
-        };
-    }, []);
-
     return (
         <div className="flex flex-col min-h-[100dvh]">
             <div className="bg-black text-white">
@@ -123,12 +24,12 @@ export default function AboutPage() {
                     <div className="px-6 md:px-8 space-y-12 xl:space-y-16">
                         <div className="grid max-w-[1300px] mx-auto gap-6 md:gap-12 md:grid-cols-2">
                             <div>
-                                <h1 id='article-sum'className="lg:leading-tighter text-4xl md:text-5xl xl:text-6xl">
-                                    Article Summary
+                                <h1 id='article-sum' className="lg:leading-tighter text-4xl md:text-5xl xl:text-6xl">
+                                    About Our App
                                 </h1>
                                 <p className="mx-auto max-w-[700px] text-lg ">
-                                    Quickly summarize articles, extract keywords, analyze sentiment, and get answers to your questions -
-                                    all with our powerful AI-driven web app.
+                                    Our medical assistance app leverages the power of the Gemini API and OPAL for real-time policy management to provide personalized healthcare solutions. 
+                                    Users can describe their illness via a form, and our API generates a response categorizing the severity as mild, severe, or extreme.
                                 </p>
                             </div>
                             <div className="flex flex-col items-start space-y-6 key-features">
@@ -138,15 +39,23 @@ export default function AboutPage() {
                                 <ul className="grid gap-3 py-6">
                                     <li className="flex items-center gap-2">
                                         <CheckIcon className="w-6 h-6" />
-                                        <span className="text-lg">Automatically extract keywords from article content</span>
+                                        <span className="text-lg">Analyze user-submitted illness descriptions</span>
                                     </li>
                                     <li className="flex items-center gap-2">
                                         <CheckIcon className="w-6 h-6" />
-                                        <span className="text-lg">Perform sentiment analysis on user comments</span>
+                                        <span className="text-lg">Categorize illness severity: mild, severe, or extreme</span>
                                     </li>
                                     <li className="flex items-center gap-2">
                                         <CheckIcon className="w-6 h-6" />
-                                        <span className="text-lg">Get answers to your questions about the article from an AI assistant</span>
+                                        <span className="text-lg">Direct contact with doctors for severe and extreme cases</span>
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <CheckIcon className="w-6 h-6" />
+                                        <span className="text-lg">Automatic alerts for immediate medical attention in extreme cases</span>
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <CheckIcon className="w-6 h-6" />
+                                        <span className="text-lg">Contact emergency services if necessary</span>
                                     </li>
                                 </ul>
                                 <div className="space-x-6">
@@ -174,56 +83,34 @@ export default function AboutPage() {
                                 Benefits
                             </div>
                             <h2 className="text-4xl md:text-5xl font-bold tracking-tighter">
-                                Streamline Your Research
+                                Comprehensive Medical Assistance
                             </h2>
                             <p className="max-w-[900px] text-lg text-gray-500 md:text-xl lg:text-base xl:text-lg">
-                                Our app helps you quickly summarize articles, identify key insights, and get answers to your questions
-                                - saving you time and effort in your research.
+                                Our app provides a thorough analysis of your medical condition, offering quick summaries and direct connections to healthcare professionals when necessary.
                             </p>
                         </div>
                         <div className="mx-auto grid items-start justify-center gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
                             <div className="grid gap-3">
-                                <h3 className="text-xl font-bold">Automated Summarization</h3>
+                                <h3 className="text-xl font-bold">Severity Categorization</h3>
                                 <p className="text-lg text-gray-500">
-                                    Our AI-powered summarization engine quickly distills long articles into concise, easy-to-digest
-                                    summaries.
+                                    Understand the severity of your condition with our detailed analysis, categorizing it as mild, severe, or extreme.
                                 </p>
                             </div>
                             <div className="grid gap-3">
-                                <h3 className="text-xl font-bold">Keyword Extraction</h3>
+                                <h3 className="text-xl font-bold">Doctor Recommendations</h3>
                                 <p className="text-lg text-gray-500">
-                                    Identify the most important concepts and topics in an article with our keyword extraction feature.
+                                    Get recommendations for doctors based on your specific illness for personalized care.
                                 </p>
                             </div>
                             <div className="grid gap-3">
-                                <h3 className="text-xl font-bold">Sentiment Analysis</h3>
+                                <h3 className="text-xl font-bold">Emergency Alerts</h3>
                                 <p className="text-lg text-gray-500">
-                                    Understand the overall sentiment expressed in user comments with our sentiment analysis capabilities.
-                                </p>
-                            </div>
-                            <div className="grid gap-3">
-                                <h3 className="text-xl font-bold">AI-Powered Q&A</h3>
-                                <p className="text-lg text-gray-500">
-                                    Ask questions about the article content and get answers from our intelligent assistant.
-                                </p>
-                            </div>
-                            <div className="grid gap-3">
-                                <h3 className="text-xl font-bold">Easy to Use</h3>
-                                <p className="text-lg text-gray-500">
-                                    Our intuitive interface makes it simple to summarize articles, analyze comments, and get answers to
-                                    your questions.
-                                </p>
-                            </div>
-                            <div className="grid gap-3">
-                                <h3 className="text-xl font-bold">Powerful Insights</h3>
-                                <p className="text-lg text-gray-500">
-                                    Uncover valuable insights and trends by leveraging the power of AI-driven article analysis.
+                                    Receive immediate alerts and assistance for extreme cases, including contacting emergency services if needed.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </section>
-
                 <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 flex justify-center align-center how-it-works">
                     <div className="container grid items-center justify-center gap-8 px-6 md:px-8 text-center">
                         <div className="space-y-6">
@@ -231,30 +118,29 @@ export default function AboutPage() {
                                 How it Works
                             </div>
                             <h2 className="text-4xl md:text-5xl font-bold tracking-tighter">
-                                Streamlined Article Analysis
+                                Easy and Efficient Medical Assistance
                             </h2>
                             <p className="mx-auto max-w-[600px] text-lg text-gray-500 md:text-xl lg:text-base xl:text-lg">
-                                Our app makes it easy to summarize articles, extract keywords, analyze sentiment, and get answers to
-                                your questions.
+                                Our app makes it simple to describe your illness, receive a severity assessment, and get connected with healthcare professionals.
                             </p>
                         </div>
                         <div className="mx-auto w-full max-w-sm space-y-6">
                             <div className="flex flex-col gap-3">
                                 <div className="flex items-center gap-3">
                                     <CheckIcon className="h-6 w-6 text-green-500" />
-                                    <span className="text-lg">Enter article URL</span>
+                                    <span className="text-lg">Enter your symptoms</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <CheckIcon className="h-6 w-6 text-green-500" />
-                                    <span className="text-lg">Get article summary and keywords</span>
+                                    <span className="text-lg">Receive a severity assessment</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <CheckIcon className="h-6 w-6 text-green-500" />
-                                    <span className="text-lg">Analyze comments and sentiment</span>
+                                    <span className="text-lg">Get connected with doctors if needed</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <CheckIcon className="h-6 w-6 text-green-500" />
-                                    <span className="text-lg">Ask questions, get answers</span>
+                                    <span className="text-lg">Receive emergency alerts for extreme cases</span>
                                 </div>
                             </div>
                         </div>
@@ -262,32 +148,7 @@ export default function AboutPage() {
                 </section>
                 <Footer />
             </main>
-            <button
-        id="start-tour"
-        className="fixed bottom-4 right-4 rounded-full bg-blue-800 text-white p-4 shadow-lg hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-gray-900 z-10"
-      >
-        Guide me
-      </button>
         </div>
-    );
-}
-
-function BookIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-        </svg>
     );
 }
 
@@ -309,5 +170,3 @@ function CheckIcon(props) {
         </svg>
     );
 }
-
-

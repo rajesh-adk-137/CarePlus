@@ -81,23 +81,24 @@ async def classify_and_respond_with_gemini(age, gender, symptoms, duration, feel
     Given the following patient information:
     Age: {age}
     Gender: {gender}
-    Symptoms: {symptoms} description by the patient
+    Symptoms: {symptoms} description by the patient, can be symptoms or nature of illness
     Duration: {duration} days
     Pain Rating: {feeling} (scale of 1 to 10, 1 being fine, 10 being extremely bad)
     
-    Provide the following details in JSON format as you are talking to the patient as an expert system:
+    Provide the following details in JSON format as you are talking to the patient as an expert system, strictly provide the JSON format, no extra information please, rememeber you are replying to the patient, also if you don't have respose for each reply field, keep it empty, but never divert from json format:
     - Symptom Analysis 'symptoms_analysis' : A brief overview of the symptoms described and potential cause or disease, in array format in few points
-    - Categorize the illness in terms of severity 'severity': mild, severe, extreme.
+    - Categorize the illness in terms of severity 'severity': mild, severe, extreme.<if you think it is more than mild, just return severe>
     - Immediate Remedies as array of 'immediate_remedies' with following 3 arrays inside:
       - Medications as first array 'medication': Over-the-counter medications or prescribed drugs (leave empty for extreme cases).
       - Home Remedies as second array 'home_remedies': Tips on rest, hydration, and diet (leave empty for extreme cases).
       - Things to Avoid as third array 'avoid': Foods, activities, or behaviors to avoid.
-    - Potential Doctor to Consult 'doctor': Types of specialists or primary care physicians relevant to the symptoms from one of these: Neurology, Cardiology, Pediatrics, Orthopedics, Dermatology, Gastroenterology, Oncology, Psychiatry, or General Physician"""
+    - Potential Doctor to Consult 'doctor': Types of specialists or primary care physicians relevant to the symptoms from one of these, select one which is closest: Neurology, Cardiology, Pediatrics, Orthopedics, Dermatology, Gastroenterology, Oncology, Psychiatry, Allergist,Ophthalmology,Radiology or General Physician"""
 
     api_key = os.getenv("API_KEY")
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-1.5-pro')
     result = model.generate_content(prompt_response)
+    print(result)
 
     # Ensure the result contains the expected structure
     if not result.candidates:
