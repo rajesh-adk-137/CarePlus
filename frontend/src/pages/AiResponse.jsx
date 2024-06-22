@@ -71,12 +71,13 @@ const AiResponse = () => {
     return (
       <>
         {allowedResources.combinedResponse && <CombinedResponse responsedData={responsedData} />}
+        {allowedResources.extremeResponse  && <ExtremeResponse responsedData={responsedData} />}
         {allowedResources.doctorCard && severity !== 'mild' && (
           <Box mt={4}>
             <DoctorsList responsedData={responsedData} />
           </Box>
         )}
-        {allowedResources.extremeResponse && severity === 'extreme' && <ExtremeResponse responsedData={responsedData} />}
+        
       </>
     );
   };

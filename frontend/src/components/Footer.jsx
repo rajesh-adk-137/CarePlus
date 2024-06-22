@@ -1,39 +1,69 @@
-import { FaFacebook, FaInstagram, FaLinkedin, FaTiktok } from "react-icons/fa";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { FaFacebook, FaInstagram, FaLinkedin, FaTiktok, FaHome, FaInfoCircle, FaEnvelope, FaQuestionCircle } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
-const Footer = ({ darkMode = true }) => {
-  return (
-    <div className={darkMode ? "flex flex-col gap-10 justify-between items-center bg-gray-950 text-gray-300 py-6 pt-10 text-sm"
-      : "flex flex-col gap-10 justify-between items-center bg-gray-100 text-gray-700 py-6 pt-10 text-sm"}>
-      <div className=" mx-auto flex justify-evenly items-center w-full ">
-        <div className="flex flex-col gap-1 justify-center items-start">
-          <div className="text-2xl md:text-4xl font-bold">Article<span className='text-[#4fe331]'>Insight</span></div>
-          <div className="text-xl text-gray-600">Your Ultimate Article Analysis Tool.</div>
-          <div className="mt-3 flex text-xl gap-2 text-gray-500 ">
-            <FaFacebook className="hover:text-white" />
-            <FaInstagram className="hover:text-white" />
-            <FaTiktok className="hover:text-white" />
-            <FaXTwitter className="hover:text-white" />
-            <FaLinkedin className="hover:text-white" />
-          </div>
-        </div>
-        <div className="flex justify-end items-start gap-x-14 md:gap-x-32 w-2/5">
-          <div className="flex flex-col gap-3">
-            <a href="https://github.com/rajesh-adk-137"><div className="hover:text-white hover:cursor-pointer">About Us</div></a>
-            <div className="hover:text-white hover:cursor-pointer">Features</div>
-            <a href="https://github.com/rajesh-adk-137"><div className="hover:text-white hover:cursor-pointer">Feedback</div></a>
-            <a href="https://github.com/rajesh-adk-137"><div className="hover:text-white hover:cursor-pointer">Contact Us</div></a>
-          </div>
-          <div className="flex flex-col gap-3">
-            <a href="https://quine.sh/"><div className="hover:text-white hover:cursor-pointer">Quine</div></a>
-          </div>
-        </div>
-      </div>
-      <div className="text-gray-600 text-lg">
-        &#169; Article Analysis 2024. All rights reserved.
-      </div>
-    </div>
-  );
+const Footer = () => {
+    return (
+        <footer className="bg-[#0d0f2f] text-white py-12">
+            <div className="container mx-auto px-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div>
+                        <Link to="/" className="flex items-center mb-4">
+                            <img src="/src/assets/images/giphy.webp" alt="CarePlus Logo" className="h-10 w-10 mr-3" />
+                            <motion.div className='text-2xl font-bold' whileHover={{ scale: 1.05 }}>
+                                Care<span className='text-[#00ff9d]'>Plus</span>
+                            </motion.div>
+                        </Link>
+                        <p className="text-gray-300 mb-6">Empowering your health journey with AI-driven insights and personalized care.</p>
+                        <div className="flex space-x-4">
+                            <SocialIcon Icon={FaFacebook} />
+                            <SocialIcon Icon={FaInstagram} />
+                            <SocialIcon Icon={FaTiktok} />
+                            <SocialIcon Icon={FaXTwitter} />
+                            <SocialIcon Icon={FaLinkedin} />
+                        </div>
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
+                        <ul className="space-y-2">
+                            <FooterLink icon={<FaHome />} text="Home" to="/" />
+                            <FooterLink icon={<FaInfoCircle />} text="About Us" to="/about" />
+                            <FooterLink icon={<FaEnvelope />} text="Contact" to="/contact" />
+                            <FooterLink icon={<FaQuestionCircle />} text="FAQ" to="/faq" />
+                        </ul>
+                    </div>
+                </div>
+                <div className="border-t border-gray-700 mt-10 pt-6 text-center text-gray-400">
+                    © {new Date().getFullYear()} CarePlus. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    );
 };
+
+const SocialIcon = ({ Icon }) => (
+    <motion.a 
+        href="#"
+        className="text-gray-400 hover:text-[#00ff9d] transition duration-300"
+        whileHover={{ scale: 1.2, rotate: 15 }}
+        whileTap={{ scale: 0.9 }}
+    >
+        <Icon size={24} />
+    </motion.a>
+);
+
+const FooterLink = ({ icon, text, to }) => (
+    <li>
+        <Link 
+            to={to}
+            className="flex items-center space-x-2 text-gray-300 hover:text-[#00ff9d] transition duration-300"
+        >
+            {icon}
+            <span>{text}</span>
+        </Link>
+    </li>
+);
 
 export default Footer;

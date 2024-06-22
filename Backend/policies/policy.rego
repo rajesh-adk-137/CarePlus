@@ -20,7 +20,7 @@ allow {
 allow {
   input.user.role == "patient"
   input.action == "view"
-  input.resource == "combined_response"
+  input.resource == "doctors_database"
 }
 
 # Allow patients to read based on the severity of their case

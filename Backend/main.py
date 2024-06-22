@@ -86,7 +86,7 @@ async def classify_and_respond_with_gemini(age, gender, symptoms, duration, feel
     
     {{
       "symptoms_analysis": ["Symptom analysis and potential causes in array format. Each analysis in a separate string."],
-      "severity": "Categorize the illness as 'mild', 'severe', or 'extreme'. If it is more than mild, just return 'severe'.",
+      "severity": "Categorize the illness as 'mild', 'severe', or 'extreme' ",
       "immediate_remedies": {{
         "medication": ["Over-the-counter medications or prescribed drugs. Leave empty for extreme cases."],
         "home_remedies": ["Tips on rest, hydration, and diet. Leave empty for extreme cases."],
@@ -97,7 +97,7 @@ async def classify_and_respond_with_gemini(age, gender, symptoms, duration, feel
     
     Example of expected JSON format:
     {{
-      "symptoms_analysis": ["Possible cause 1", "Possible cause 2"],
+      "symptoms_analysis": ["Possible cause 1", "Possible cause 2", "others.."],
       "severity": "severe",
       "immediate_remedies": {{
         "medication": ["Medication 1", "Medication 2"],

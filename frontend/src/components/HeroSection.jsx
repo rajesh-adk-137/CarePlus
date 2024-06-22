@@ -1,114 +1,169 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-import heroImage from "../assets/images/learning-with-ai.png"; // Update with an appropriate image
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { FaArrowRight } from 'react-icons/fa';
+import heroImage from "../assets/images/reflect.png";
 
 const HeroSection = () => {
-    const gradientStyle = {
-        background: 'rgb(0,85,184)',
-        background: 'radial-gradient(circle, rgb(0,85,184,1) 0%, rgba(0,0,0,1) 55%)'
+    const navigate = useNavigate();
+
+    const handleGetStarted = () => {
+        const token = localStorage.getItem('token');
+        const userRole = localStorage.getItem('role');
+        
+        if (token) {
+            navigate(userRole === 'patient' ? '/fillup' : userRole === 'doctor' ? '/doctor' : '/');
+        } else {
+            navigate('/auth');
+        }
     };
 
-    const navigate = useNavigate();
-    const handleTryItNow = () => {
-        const token = localStorage.getItem('token');
-        let userRole = localStorage.getItem('role'); // Declare userRole using 'let'
-      
-        if (token) {
-          if (userRole === 'patient') {
-            navigate('/fillup');
-          } else if (userRole === 'doctor') {
-            navigate('/doctor');
-          } else {
-            // Handle other roles if needed
-            navigate('/auth'); // Navigate to authentication page for unrecognized roles
-          }
-        } else {
-          navigate('/auth'); // Navigate to authentication page if token is not present
-        }
-      };
-      
-
     return (
-        <div className='grid grid-cols-1 md:grid-cols-6 m-10 h-[80%] md:px-20'>
-            <motion.div
-                className='flex justify-center items-center col-span-3'
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <div>
-                    <motion.h1
-                        className='text-green-400 text-xl tracking-widest'
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1.2, delay: 0.5 }}
+        <div className="bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 min-h-screen flex items-center">
+            <div className="container mx-auto px-6 py-12 md:py-24">
+                <div className="flex flex-col md:flex-row items-center justify-between">
+                    <motion.div 
+                        className="md:w-1/2 mb-12 md:mb-0"
+                        initial={{ opacity: 0, x: -50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6 }}
                     >
-                        AI-POWERED HEALTH ASSISTANCE
-                    </motion.h1>
-                    <motion.h1
-                        className='hero-title text-5xl md:text-8xl font-bold my-3'
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1, fontSize: 50, x: 15, y: 20 }}
-                        transition={{ delay: 0.5, duration: 0.5 }}
+                        <img 
+                            src={heroImage} 
+                            alt="AI in Healthcare" 
+                            className="rounded-lg shadow-xl w-full h-auto max-w-md mx-auto"
+                        />
+                    </motion.div>
+                    <motion.div 
+                        className="md:w-1/2 md:pl-12"
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
                     >
-                        HEALTHCARE INSIGHT
-                    </motion.h1>
-                    <motion.p
-                        className='hero-description text-xl md:text-2xl text-[#aaabc4] my-10'
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1.2, delay: 0.5 }}
-                    >
-                        Transform your health management with HealthCareInsight – an innovative app that monitors your health metrics, offers personalized insights, and provides expert advice.
-                    </motion.p>
-                    <motion.div
-                        className='hero-buttons flex flex-row gap-10'
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1.2, delay: 0.8 }}
-                    >
-                        <button
-                            onClick={handleTryItNow}
-                            className='bg-[#171a8d] text-[#5ce1ff] font-bold px-5 py-3 rounded-lg flex items-center justify-center space-x-2 transition duration-300 ease-in-out hover:bg-[#0f0e69] hover:shadow-lg'
-                            whileHover={{ scale: 1.2, textShadow: "0px 0px 8px", borderShadow: "0px 0px 8px" }}
-                            transition={{ duration: 0.1 }}
+                        <motion.h2 
+                            className="text-3xl font-semibold text-blue-600 mb-2"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.4, duration: 0.5 }}
                         >
-                            <span>TRY IT NOW</span>
-                            <MdKeyboardDoubleArrowRight className="text-xl" />
-                        </button>
-                        <a href="https://quine.sh/repo/rajesh-adk-137-ArticleInsightGuide-808910229">
-                            <motion.button className='bg-[#4fe331] text-black font-bold px-5 py-3 rounded-lg flex items-center justify-center space-x-2 transition duration-300 ease-in-out hover:bg-[#3fb427] hover:shadow-lg'
-                                whileHover={{ scale: 1.2, borderShadow: "0px 0px 2px" }}
-                                transition={{ duration: 0.1 }}>
-                                <span>VOTE ON QUINE</span>
-                                <MdKeyboardDoubleArrowRight className="text-xl" />
-                            </motion.button>
-                        </a>
+                            Intelligent Care for a Healthier You
+                        </motion.h2>
+                        <motion.h1 
+                            className="text-5xl font-bold text-gray-800 mb-6"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.2, duration: 0.5 }}
+                        >
+                            Smart Health Guidance
+                        </motion.h1>
+                        <motion.p 
+                            className="text-xl mb-8 text-gray-600"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.6, duration: 0.5 }}
+                        >
+                            Discover the Future of Health with AI: Experience personalized health guidance and proactive care recommendations driven by advanced AI technology, tailored just for you.
+                        </motion.p>
+                        <motion.button
+                            onClick={handleGetStarted}
+                            className="bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg flex items-center hover:bg-blue-700 transition duration-300"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            Get Started
+                            <FaArrowRight className="ml-2" />
+                        </motion.button>
                     </motion.div>
                 </div>
-            </motion.div>
-            <motion.div
-                className='col-span-3 flex justify-center items-center'
-                style={gradientStyle}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <div id="this-project" className='p-2 md:w-full md:max-w-md'>
-                    <motion.img
-                        src={heroImage}
-                        alt="Hero Image"
-                        className="w-full h-auto rounded-lg"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.7, delay: 0.5 }}
-                    />
-                </div>
-            </motion.div>
+            </div>
         </div>
     );
 };
 
 export default HeroSection;
+
+
+
+// import React from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { motion } from 'framer-motion';
+// import { FaArrowRight } from 'react-icons/fa';
+// import heroImage from "../assets/images/reflect.png";
+
+// const HeroSection = () => {
+//     const navigate = useNavigate();
+
+//     const handleGetStarted = () => {
+//         const token = localStorage.getItem('token');
+//         const userRole = localStorage.getItem('role');
+        
+//         if (token) {
+//             navigate(userRole === 'patient' ? '/fillup' : userRole === 'doctor' ? '/doctor' : '/');
+//         } else {
+//             navigate('/auth');
+//         }
+//     };
+
+//     return (
+//         <div className="bg-gradient-to-br from-blue-100 to-blue-200 min-h-screen flex items-center">
+//             <div className="container mx-auto px-6 py-12 md:py-24">
+//                 <div className="flex flex-col md:flex-row items-center justify-between">
+//                     <motion.div 
+//                         className="md:w-1/2 mb-12 md:mb-0"
+//                         initial={{ opacity: 0, x: -50 }}
+//                         animate={{ opacity: 1, x: 0 }}
+//                         transition={{ duration: 0.6 }}
+//                     >
+//                         <img 
+//                             src={heroImage} 
+//                             alt="AI in Healthcare" 
+//                             className="rounded-lg shadow-xl w-full h-auto max-w-md mx-auto"
+//                         />
+//                     </motion.div>
+//                     <motion.div 
+//                         className="md:w-1/2 md:pl-12"
+//                         initial={{ opacity: 0, x: 50 }}
+//                         animate={{ opacity: 1, x: 0 }}
+//                         transition={{ duration: 0.6, delay: 0.2 }}
+//                     >
+//                         <motion.h2 
+//                             className="text-3xl font-semibold text-blue-600 mb-2"
+//                             initial={{ opacity: 0 }}
+//                             animate={{ opacity: 1 }}
+//                             transition={{ delay: 0.4, duration: 0.5 }}
+//                         >
+//                             Intelligent Care for a Healthier You
+//                         </motion.h2>
+//                         <motion.h1 
+//                             className="text-5xl font-bold text-gray-800 mb-6"
+//                             initial={{ opacity: 0 }}
+//                             animate={{ opacity: 1 }}
+//                             transition={{ delay: 0.2, duration: 0.5 }}
+//                         >
+//                             Smart Health Guidance
+//                         </motion.h1>
+//                         <motion.p 
+//                             className="text-xl mb-8 text-gray-600"
+//                             initial={{ opacity: 0 }}
+//                             animate={{ opacity: 1 }}
+//                             transition={{ delay: 0.6, duration: 0.5 }}
+//                         >
+//                             Discover the Future of Health with AI: Experience personalized health guidance and proactive care recommendations driven by advanced AI technology, tailored just for you.
+//                         </motion.p>
+//                         <motion.button
+//                             onClick={handleGetStarted}
+//                             className="bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg flex items-center hover:bg-blue-700 transition duration-300"
+//                             whileHover={{ scale: 1.05 }}
+//                             whileTap={{ scale: 0.95 }}
+//                         >
+//                             Get Started
+//                             <FaArrowRight className="ml-2" />
+//                         </motion.button>
+//                     </motion.div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default HeroSection;

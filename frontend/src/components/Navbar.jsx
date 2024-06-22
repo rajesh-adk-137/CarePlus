@@ -1,37 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { GiHamburgerMenu } from "react-icons/gi";
-import { ImCross } from "react-icons/im";
-import { FaGithub } from "react-icons/fa";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FaGithub, FaHome, FaInfoCircle, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const Navbar = () => {
-    const [click, setClick] = useState(false);
-    const [button, setButton] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const location = useLocation();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         setIsLoggedIn(!!token);
     }, []);
-
-    const handleClick = () => {
-        setClick(!click);
-    };
-
-    const closeMobileMenu = () => {
-        setClick(false);
-    };
-
-    const showButton = () => {
-        if (window.innerWidth <= 760) {
-            setButton(false);
-        } else {
-            setButton(true);
-        }
-    };
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -40,94 +20,93 @@ const Navbar = () => {
         navigate('/');
     };
 
-    useEffect(() => {
-        showButton();
-    }, []);
-
     const handleNavigation = () => {
         const token = localStorage.getItem('token');
         if (token) {
             const userRole = localStorage.getItem('role');
-            if (userRole === 'patient') {
-                navigate('/fillup');
-            } else if (userRole === 'doctor') {
-                navigate('/doctor');
-            } else {
-                navigate('/');
-            }
+            navigate(userRole === 'patient' ? '/fillup' : userRole === 'doctor' ? '/doctor' : '/');
         } else {
             navigate('/auth');
         }
     };
 
     return (
-        <>
-            <header className="min-h-24 flex justify-center">
-                <nav className="flex justify-between items-center w-[92%] mx-auto pt-4">
-                    <Link to="/">
-                        <motion.div className='text-3xl font-bold ml-4 md:ml-10' whileHover={{ scale: 1.1 }}>
-                            Article<span className='text-[#4fe331]'>Insight</span>
+        <header className="bg-[#0d0f2f] text-white">
+            <nav className="container mx-auto px-6 py-4">
+                <div className="flex items-center justify-between">
+                    <Link to="/" className="flex items-center">
+                    <img src="/src/assets/images/giphy.webp" alt="CarePlus Logo" className="h-10 w-10 mr-3" />
+                        <motion.div className='text-2xl font-bold' whileHover={{ scale: 1.05 }}>
+                            Care<span className='text-[#00ff9d]'>Plus</span>
                         </motion.div>
                     </Link>
-                    <div className={!click ? "nav-links duration-300 md:static absolute md:min-h-fit md:w-auto w-full flex items-center px-5 left-[-50rem] top-[6rem]" :
-                        "nav-links duration-500 md:static absolute bg-white text-black left-0 md:w-auto w-full flex items-center px-5 top-[5.25rem]"}>
-                        <ul className="flex md:flex-row flex-col items-center md:gap-[4vw] gap-5 w-full text-xl font-bold p-5">
-                            <li onClick={handleNavigation}>
-                                <motion.div className={!button ? 'hover:bg-gray-200 w-full text-center hover:text-black h-10 rounded-xl flex align-center justify-center md:hover:text-gray-800 pt-1' :
-                                    'hover:text-gray-800 w-full text-center flex align-center justify-center md:hover:text-blue-600 hover:border-b-2 border-blue-600 rounded-xl px-[1.25rem]'} whileHover={{ scale: 1.1 }}>
-                                    HOME
-                                </motion.div>
-                            </li>
-                            <Link to='/about'>
-                                <motion.li className={!button ? 'hover:bg-gray-200 w-full text-center hover:text-black h-10 rounded-xl flex align-center justify-center md:hover:text-gray-800 pt-1' :
-                                    'hover:text-gray-800 w-full text-center flex align-center justify-center md:hover:text-blue-600 hover:border-b-2 border-blue-600 rounded-xl px-[1.25rem]'} whileHover={{ scale: 1.1 }}>
-                                    ABOUT
-                                </motion.li>
-                            </Link>
-                        </ul>
+                    
+                    {/* Desktop Menu */}
+                    <div className="hidden md:flex items-center space-x-6">
+                        <NavItem icon={<FaHome />} text="Home" onClick={handleNavigation} />
+                        <NavItem icon={<FaInfoCircle />} text="About" to="/about" />
+                        {isLoggedIn ? (
+                            <NavItem icon={<FaSignOutAlt />} text="Logout" onClick={handleLogout} />
+                        ) : (
+                            <NavItem icon={<FaSignInAlt />} text="Login" to="/auth" />
+                        )}
+                        <a href="https://github.com/yourusername/yourrepo" target="_blank" rel="noopener noreferrer">
+                            <motion.button whileHover={{ scale: 1.05 }} className="text-white">
+                                <FaGithub size={24} />
+                            </motion.button>
+                        </a>
                     </div>
-                    <div id="github-link" className="flex items-center gap-6">
-                        <div className='flex justify-center items-center'>
-                            <a href="https://github.com/rajesh-adk-137/ArticleInsightGuide/">
-                                <motion.button className='bg-gray-300 hover:bg-gray-400 text-black md:px-5 md:py-2 rounded-md md:flex items-center space-x-2 hidden'
-                                    whileHover={{ scale: 1.1 }}>
-                                    <FaGithub />
-                                    <span>GitHub</span>
-                                </motion.button>
-                            </a>
-                        </div>
-                        {
-                            isLoggedIn ? (
-                                <motion.button
-                                    className='bg-gray-300 text-black px-4 py-2 rounded-md'
-                                    whileHover={{ scale: 1.1 }}
-                                    onClick={handleLogout}
-                                >
-                                    Logout
-                                </motion.button>
-                            ) : (
-                                <Link to="/auth">
-                                    <motion.button
-                                        className='bg-gray-300 text-black px-4 py-2 rounded-md'
-                                        whileHover={{ scale: 1.1 }}
-                                    >
-                                        Login
-                                    </motion.button>
-                                </Link>
-                            )
-                        }
-                        {
-                            click ? (
-                                <ImCross onClick={handleClick} name="menu" className="text-3xl cursor-pointer md:hidden" />
-                            ) : (
-                                <GiHamburgerMenu onClick={handleClick} name="menu" className="text-3xl cursor-pointer md:hidden" />
-                            )
-                        }
+
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden">
+                        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-white focus:outline-none">
+                            <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
+                                {isMobileMenuOpen ? (
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z" />
+                                ) : (
+                                    <path fillRule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />
+                                )}
+                            </svg>
+                        </button>
                     </div>
-                </nav>
-            </header>
-        </>
+                </div>
+
+                {/* Mobile Menu */}
+                {isMobileMenuOpen && (
+                    <div className="md:hidden mt-3 space-y-2">
+                        <NavItem icon={<FaHome />} text="Home" onClick={handleNavigation} mobile />
+                        <NavItem icon={<FaInfoCircle />} text="About" to="/about" mobile />
+                        {isLoggedIn ? (
+                            <NavItem icon={<FaSignOutAlt />} text="Logout" onClick={handleLogout} mobile />
+                        ) : (
+                            <NavItem icon={<FaSignInAlt />} text="Login" to="/auth" mobile />
+                        )}
+                        <a href="https://github.com/yourusername/yourrepo" target="_blank" rel="noopener noreferrer" className="block py-2">
+                            <FaGithub size={24} className="inline mr-2" /> GitHub
+                        </a>
+                    </div>
+                )}
+            </nav>
+        </header>
     );
+}
+
+const NavItem = ({ icon, text, to, onClick, mobile }) => {
+    const content = (
+        <motion.div
+            className={`flex items-center space-x-2 ${mobile ? 'py-2' : ''}`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+        >
+            {icon}
+            <span>{text}</span>
+        </motion.div>
+    );
+
+    if (to) {
+        return <Link to={to} className="text-white hover:text-[#00ff9d] transition duration-300">{content}</Link>;
+    }
+    return <button onClick={onClick} className="text-white hover:text-[#00ff9d] transition duration-300">{content}</button>;
 }
 
 export default Navbar;

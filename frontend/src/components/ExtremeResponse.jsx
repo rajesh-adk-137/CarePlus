@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { Typography, Box, Button } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-const ExtremeResponse = ({ responseData }) => {
-  const { symptoms_analysis } = responseData;
+const ExtremeResponse = ({ responsedData }) => {
+  const { symptoms_analysis } = responsedData;
 
   return (
     <motion.div
