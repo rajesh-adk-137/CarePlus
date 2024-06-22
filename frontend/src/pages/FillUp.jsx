@@ -6,9 +6,10 @@ import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 
 const FillUp = () => {
-  const [illness, setIllness] = useState('');
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
   const [symptoms, setSymptoms] = useState('');
-  const [duration, setDuration] = useState('');
+  const [duration, setDuration] = useState(0);
   const [feeling, setFeeling] = useState(5);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -18,29 +19,29 @@ const FillUp = () => {
     try {
       setError('');
       const token = localStorage.getItem('token');
-      const data = new URLSearchParams({
-        illness,
-        symptoms,
-        duration,
-        feeling: feeling.toString(),
-      }).toString();
-
+      const formData = new FormData();
+      formData.append('age', age);
+      formData.append('gender', gender);
+      formData.append('symptoms', symptoms);
+      formData.append('duration', duration);
+      formData.append('feeling', feeling);
+  
       const response = await axios.post(
-        'http://localhost:8000/submit_symptoms',
-        data,
+        'http://localhost:8000/submit_symptoms',``
+        formData,
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${token}`,
           },
         }
       );
-
+  
       if (response.status === 200) {
-        // Assuming the API returns a role or severity level
-        const { role } = response.data;
-        // navigate(`/airesponse?role=${role}`);
-        navigate(`/response`);
+        const { symptoms_analysis, severity, immediate_remedies, avoid,doctor } = response.data;
+        console.log(response)
+        console.log(symptoms_analysis, severity, immediate_remedies, avoid,doctor)
+        navigate(`/response`, { state: { symptoms_analysis, severity, immediate_remedies, avoid,doctor  } });
       }
     } catch (err) {
       setError('Failed to submit symptoms. Please try again.');
@@ -62,15 +63,30 @@ const FillUp = () => {
           <h2 className="text-2xl font-bold mb-6">Fill Up Your Symptoms</h2>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="illness">Nature of Illness</label>
+              <label className="block mb-1 font-medium" htmlFor="age">Age</label>
               <input
-                type="text"
-                id="illness"
+                type="number"
+                id="age"
                 className="w-full border border-gray-300 p-2 rounded"
-                value={illness}
-                onChange={(e) => setIllness(e.target.value)}
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
                 required
               />
+            </div>
+            <div>
+              <label className="block mb-1 font-medium" htmlFor="gender">Gender</label>
+              <select
+                id="gender"
+                className="w-full border border-gray-300 p-2 rounded"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                required
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
             </div>
             <div>
               <label className="block mb-1 font-medium" htmlFor="symptoms">Description of Symptoms</label>
@@ -83,9 +99,9 @@ const FillUp = () => {
               />
             </div>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="duration">Duration of Symptoms</label>
+              <label className="block mb-1 font-medium" htmlFor="duration">Duration of Symptoms (in days)</label>
               <input
-                type="text"
+                type="number"
                 id="duration"
                 className="w-full border border-gray-300 p-2 rounded"
                 value={duration}

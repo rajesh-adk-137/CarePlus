@@ -8,6 +8,7 @@ import requests
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
+import json
 
 # Load environment variables
 load_dotenv()
@@ -47,7 +48,8 @@ async def login_route(user: UserLogin, db: Session = Depends(get_db)):
 
 @app.post("/submit_symptoms")
 async def submit_symptoms(
-    illness: str = Form(...),
+    age: int = Form(...),
+    gender: str = Form(...),
     symptoms: str = Form(...),
     duration: str = Form(...),
     feeling: int = Form(...),
@@ -63,25 +65,43 @@ async def submit_symptoms(
         # raise HTTPException(status_code=403, detail="Not authorized to submit symptoms")
     
     # Use Gemini AI to classify severity
-    severity = await classify_severity_with_gemini(illness, symptoms, duration, feeling)
+    response = await classify_and_respond_with_gemini(age, gender, symptoms, duration, feeling)
+    print(response)
     print("good")
-    print(severity)
-    return JSONResponse({"severity": severity})
+    response = response.strip("```json\n```")
+    print(response)
+    return JSONResponse({"response": response})
 
-async def classify_severity_with_gemini(illness, symptoms, duration, feeling):
-    prompt = f"""
+
+
+
+async def classify_and_respond_with_gemini(age, gender, symptoms, duration, feeling):
+    # Generate detailed response based on the severity
+    prompt_response = f"""
     Given the following patient information:
-    Illness: {illness}
-    Symptoms: {symptoms}
-    Duration: {duration}
-    Pain Rating: {feeling}
-    Classify the severity of the condition into one of the following categories: mild, severe, extreme.
-    """
+    Age: {age}
+    Gender: {gender}
+    Symptoms: {symptoms} description by the patient
+    Duration: {duration} days
+    Pain Rating: {feeling} (scale of 1 to 10, 1 being fine, 10 being extremely bad)
     
+    Provide the following details in JSON format as you are talking to the patient as an expert system:
+    - Symptom Analysis 'symptoms_analysis' : A brief overview of the symptoms described and potential cause or disease, in array format in few points
+    - Categorize the illness in terms of severity 'severity': mild, severe, extreme.
+    - Immediate Remedies as array of 'immediate_remedies' with following 3 arrays inside:
+      - Medications as first array 'medication': Over-the-counter medications or prescribed drugs (leave empty for extreme cases).
+      - Home Remedies as second array 'home_remedies': Tips on rest, hydration, and diet (leave empty for extreme cases).
+      - Things to Avoid as third array 'avoid': Foods, activities, or behaviors to avoid.
+    - Potential Doctor to Consult 'doctor': Types of specialists or primary care physicians relevant to the symptoms from one of these: Neurology, Cardiology, Pediatrics, Orthopedics, Dermatology, Gastroenterology, Oncology, Psychiatry, or General Physician"""
+
     api_key = os.getenv("API_KEY")
     genai.configure(api_key=api_key)
-    model=genai.GenerativeModel('gemini-1.5-flash')
-    response=model.generate_content(prompt)
-    return response.text
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    result = model.generate_content(prompt_response)
 
-# You can define other routes here based on your requirements
+    # Ensure the result contains the expected structure
+    if not result.candidates:
+        raise ValueError("No candidates found in the response")
+    
+    response_detailed = result.text
+    return response_detailed
