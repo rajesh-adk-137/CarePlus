@@ -10,7 +10,7 @@ const AuthPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const [role, setRole] = useState('patient');
+  const [role, setRole] = useState('patient'); // Default role set to 'patient'
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -30,9 +30,19 @@ const AuthPage = () => {
 
       const response = await axios.post(url, data);
       if (response.status === 200) {
-        console.log(response.data);
-        localStorage.setItem('token', response.data.access_token);
-        navigate('/home');
+        const { access_token, role: userRole } = response.data;
+        localStorage.setItem('token', access_token);
+        localStorage.setItem('role', userRole); // Save the role to local storage
+
+        // Navigate based on role
+        if (userRole === 'patient') {
+          navigate('/fillup');
+        } else if (userRole === 'doctor') {
+          navigate('/doctor');
+        } else {
+          // Handle other roles if needed
+          navigate('/');
+        }
       }
     } catch (err) {
       setError('Authentication failed. Please try again.');

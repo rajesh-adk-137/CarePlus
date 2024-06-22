@@ -11,15 +11,24 @@ const HeroSection = () => {
     };
 
     const navigate = useNavigate();
-
     const handleTryItNow = () => {
         const token = localStorage.getItem('token');
+        let userRole = localStorage.getItem('role'); // Declare userRole using 'let'
+      
         if (token) {
-            navigate('/home');
+          if (userRole === 'patient') {
+            navigate('/fillup');
+          } else if (userRole === 'doctor') {
+            navigate('/doctor');
+          } else {
+            // Handle other roles if needed
+            navigate('/auth'); // Navigate to authentication page for unrecognized roles
+          }
         } else {
-            navigate('/auth');
+          navigate('/auth'); // Navigate to authentication page if token is not present
         }
-    };
+      };
+      
 
     return (
         <div className='grid grid-cols-1 md:grid-cols-6 m-10 h-[80%] md:px-20'>

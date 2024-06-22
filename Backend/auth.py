@@ -29,9 +29,11 @@ class UserLogin(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    role: str
 
 class TokenData(BaseModel):
     email: str | None = None
+    role: str | None = None
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -50,7 +52,6 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     return encoded_jwt
 
 async def signup(user: UserCreate, db: Session):
-    # Check if the user already exists
     existing_user = db.query(User).filter(User.email == user.email).first()
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -60,8 +61,8 @@ async def signup(user: UserCreate, db: Session):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    access_token = create_access_token(data={"sub": db_user.email})
-    return {"access_token": access_token, "token_type": "bearer"}
+    access_token = create_access_token(data={"sub": db_user.email, "role": db_user.role})
+    return {"access_token": access_token, "token_type": "bearer", "role": db_user.role}
 
 async def login(user: UserLogin, db: Session):
     db_user = db.query(User).filter(User.email == user.email).first()
@@ -69,8 +70,8 @@ async def login(user: UserLogin, db: Session):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     if not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-    access_token = create_access_token(data={"sub": db_user.email})
-    return {"access_token": access_token, "token_type": "bearer"}
+    access_token = create_access_token(data={"sub": db_user.email, "role": db_user.role})
+    return {"access_token": access_token, "token_type": "bearer", "role": db_user.role}
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
@@ -81,9 +82,10 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
-        if email is None:
+        role: str = payload.get("role")
+        if email is None or role is None:
             raise credentials_exception
-        token_data = TokenData(email=email)
+        token_data = TokenData(email=email, role=role)
     except JWTError:
         raise credentials_exception
 
