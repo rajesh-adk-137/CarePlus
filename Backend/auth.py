@@ -34,6 +34,11 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     email: str | None = None
     role: str | None = None
+    
+    
+class PolicyVerificationRequest(BaseModel):
+    severity: str
+    resource: str
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)

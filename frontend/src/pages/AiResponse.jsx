@@ -1,56 +1,84 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Box, Container, Typography } from '@mui/material';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import DoctorsList from '../components/DoctorsList';
-import CombinedResponse from '../components/CombinedResponse'; 
-import ExtremeResponse from '../components/ExtremeResponse'; 
+import CombinedResponse from '../components/CombinedResponse';
+import ExtremeResponse from '../components/ExtremeResponse';
+import axios from 'axios';
 
 const AiResponse = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [allowedResources, setAllowedResources] = useState({
+    combinedResponse: false,
+    doctorCard: false,
+    extremeResponse: false,
+  });
   const { responsedData } = location.state || {};
   const severity = responsedData?.severity;
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('role');
     if (!token) {
       alert('You are not logged in.');
       navigate('/');
+    } else {
+      const checkPolicies = async () => {
+        try {
+          const resources = ['combined_response', 'doctor_card', 'extreme_response'];
+          const promises = resources.map(resource =>
+            axios.post('http://localhost:8000/policy_verification', {
+              severity: severity,
+              resource: resource
+            }, {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            })
+          );
+          const responses = await Promise.all(promises);
+
+          const updatedAllowedResources = {
+            combinedResponse: responses[0].data.allowed,
+            doctorCard: responses[1].data.allowed,
+            extremeResponse: responses[2].data.allowed,
+          };
+          setAllowedResources(updatedAllowedResources);
+
+          if (!Object.values(updatedAllowedResources).some(allowed => allowed)) {
+            alert('You are not authorized to view any content.');
+            navigate('/');
+          }
+        } catch (error) {
+          console.error('Error checking policies', error);
+          alert('Error checking policies');
+          navigate('/');
+        }
+      };
+
+      checkPolicies();
     }
-  }, [navigate]);
+  }, [navigate, severity]);
 
   const renderContent = () => {
     if (!responsedData) {
-      return <Typography>Loading error.Try resubmitting the form</Typography>;
+      return <Typography>Loading error. Try resubmitting the form</Typography>;
     }
 
-    if (severity === 'mild') {
-      return <CombinedResponse responsedData={responsedData} />;
-    } else if (severity === 'severe') {
-      return (
-        <>
-          <CombinedResponse responsedData={responsedData} />
+    return (
+      <>
+        {allowedResources.combinedResponse && <CombinedResponse responsedData={responsedData} />}
+        {allowedResources.doctorCard && severity !== 'mild' && (
           <Box mt={4}>
             <DoctorsList responsedData={responsedData} />
           </Box>
-        </>
-      );
-    } else if (severity === 'extreme') {
-      return (
-        <>
-          <ExtremeResponse responsedData={responsedData} />
-          <Box mt={4}>
-            <DoctorsList responsedData={responsedData} />
-          </Box>
-        </>
-      );
-    } else {
-      return <Typography>Unknown condition.</Typography>;
-    }
+        )}
+        {allowedResources.extremeResponse && severity === 'extreme' && <ExtremeResponse responsedData={responsedData} />}
+      </>
+    );
   };
 
   return (

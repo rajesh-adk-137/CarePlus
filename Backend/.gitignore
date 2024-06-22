@@ -2,3 +2,4 @@ env
 test.db
 .env
 __pycache__
+profiles

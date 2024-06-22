@@ -30,10 +30,6 @@ const CombinedResponse = ({ responsedData }) => {
     }
   };
 
-
-
-  const remedyTitles = ['Medications', 'Home Remedies', 'Things to Avoid'];
-
   return (
     <motion.div 
       className={`max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-lg mb-12 border-2 ${getSeverityColor(severity)}`}
@@ -65,49 +61,77 @@ const CombinedResponse = ({ responsedData }) => {
       </section>
 
       <motion.section 
-  className="mb-8"
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ delay: 0.4, duration: 0.5 }}
->
-  <h2 className="text-2xl font-semibold mb-4 text-gray-700">Immediate Remedies</h2>
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-    {remedyTitles.map((title, index) => (
-      immediate_remedies[index] && immediate_remedies[index].length > 0 && (
-        <motion.div 
-          key={index} 
-          className="bg-gray-50 p-4 rounded-md shadow-md"
+        className="mb-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+      >
+        <h2 className="text-2xl font-semibold mb-4 text-gray-700">Immediate Remedies</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {immediate_remedies.medication && immediate_remedies.medication.length > 0 && (
+            <motion.div 
+              className="bg-gray-50 p-4 rounded-md shadow-md"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <h3 className="text-xl font-semibold mb-2 text-gray-700">Medications</h3>
+              <ul className="list-disc pl-5 space-y-1">
+                {immediate_remedies.medication.map((med, idx) => (
+                  <li key={idx} className="text-gray-600">{med}</li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
+
+          {immediate_remedies.home_remedies && immediate_remedies.home_remedies.length > 0 && (
+            <motion.div 
+              className="bg-gray-50 p-4 rounded-md shadow-md"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.5 }}
+            >
+              <h3 className="text-xl font-semibold mb-2 text-gray-700">Home Remedies</h3>
+              <ul className="list-disc pl-5 space-y-1">
+                {immediate_remedies.home_remedies.map((remedy, idx) => (
+                  <li key={idx} className="text-gray-600">{remedy}</li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
+
+          {immediate_remedies.avoid && immediate_remedies.avoid.length > 0 && (
+            <motion.div 
+              className="bg-gray-50 p-4 rounded-md shadow-md"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.0, duration: 0.5 }}
+            >
+              <h3 className="text-xl font-semibold mb-2 text-gray-700">Things to Avoid</h3>
+              <ul className="list-disc pl-5 space-y-1">
+                {immediate_remedies.avoid.map((avoid, idx) => (
+                  <li key={idx} className="text-gray-600">{avoid}</li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
+        </div>
+      </motion.section>
+
+      {(severity.toLowerCase() === 'mild' || severity.toLowerCase() === 'severe') && (
+        <motion.div
+          className="mt-4 p-4 bg-blue-50 rounded-md text-blue-700"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 + index * 0.2, duration: 0.5 }}
+          transition={{ delay: 1.2, duration: 0.5 }}
         >
-          <h3 className="text-xl font-semibold mb-2 text-gray-700">{title}</h3>
-          <ul className="list-disc pl-5 space-y-1
-          bg-blue-50">
-            {immediate_remedies[index].map((remedy, idx) => (
-              <li key={idx} className="text-gray-600">{remedy}</li>
-            ))}
-          </ul>
+          {severity.toLowerCase() === 'mild' ? (
+            <p>Remember to consult with the pharmacist if you plan to take any medicines or if you are on other medications.</p>
+          ) : (
+            <p className="text-yellow-700">It is recommended you contact one of our recommended doctors below and get comprehensive expertise.</p>
+          )}
         </motion.div>
-      )
-    ))}
-  </div>
-</motion.section>
-
-{(severity.toLowerCase() === 'mild' || severity.toLowerCase() === 'severe') && (
-  <motion.div
-    className="mt-4 p-4 bg-blue-50 rounded-md text-blue-700"
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 1, duration: 0.5 }}
-  >
-    {severity.toLowerCase() === 'mild' ? (
-      <p>Remember to consult with the pharmacist if you plan to take any medicines or if you are on other medications.</p>
-    ) : (
-      <p  className= "text-yellow-700">It is recommended you contact one of our recommended doctors below and get comprehensive expertise.</p>
-    )}
-  </motion.div>
-)}
+      )}
     </motion.div>
   );
 };

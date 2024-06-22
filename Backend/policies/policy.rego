@@ -2,9 +2,11 @@ package authz
 
 default allow = false
 
-# Allow doctors to perform any action
+# Allow doctors to update the doctors database
 allow {
   input.user.role == "doctor"
+  input.action == "submit_doctor_info"
+  input.resource == "doctors_database"
 }
 
 # Allow patients to submit their symptoms
@@ -14,26 +16,22 @@ allow {
   input.resource == "symptoms"
 }
 
-# Allow patients to read mild severity resources
+# Allow patients to view the doctors database information
 allow {
   input.user.role == "patient"
-  input.user.severity == "mild"
-  input.action == "read"
-  input.resource == "mild_resources"
+  input.action == "view"
+  input.resource == "combined_response"
 }
 
-# Allow patients to read severe severity resources
+# Allow patients to read based on the severity of their case
 allow {
   input.user.role == "patient"
-  input.user.severity == "severe"
   input.action == "read"
-  input.resource == "severe_resources"
+  allowed_resources_for_severity[input.severity][input.resource]
 }
 
-# Allow patients to read extreme severity resources
-allow {
-  input.user.role == "patient"
-  input.user.severity == "extreme"
-  input.action == "read"
-  input.resource == "extreme_resources"
+allowed_resources_for_severity = {
+  "mild": {"combined_response"},
+  "severe": {"combined_response", "doctor_card"},
+  "extreme": {"extreme_response", "doctor_card"}
 }

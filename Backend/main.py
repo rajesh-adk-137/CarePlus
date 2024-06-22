@@ -2,14 +2,13 @@ from fastapi import FastAPI, Depends, HTTPException, Form, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from auth import UserCreate, UserLogin, Token, signup, login, get_db, get_current_user
-from database import User,DoctorProfile, get_db
+from auth import UserCreate, UserLogin, Token, PolicyVerificationRequest, signup, login, get_db, get_current_user
+from database import User, DoctorProfile, get_db
 import requests
 import os
 from PIL import Image
 from dotenv import load_dotenv
 import google.generativeai as genai
-from sqlalchemy.orm import Session
 import shutil
 import base64
 from io import BytesIO
@@ -60,22 +59,18 @@ async def submit_symptoms(
     current_user: User = Depends(get_current_user)
 ):
     input_data = {
-        "user": {"role": current_user.role},
+        "user": {"role": 'patient'},
         "action": "submit",
         "resource": "symptoms"
     }
     if not check_permissions(input_data):
-        pass
-        # raise HTTPException(status_code=403, detail="Not authorized to submit symptoms")
+        raise HTTPException(status_code=403, detail="Not authorized to submit symptoms")
     
     # Use Gemini AI to classify severity
     response = await classify_and_respond_with_gemini(age, gender, symptoms, duration, feeling)
     response = response.strip("```json\n```")
     print(response)
     return JSONResponse({"response": response})
-
-
-
 
 async def classify_and_respond_with_gemini(age, gender, symptoms, duration, feeling):
     # Generate detailed response based on the severity
@@ -113,7 +108,6 @@ async def classify_and_respond_with_gemini(age, gender, symptoms, duration, feel
     }}
     """
 
-
     api_key = os.getenv("API_KEY")
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-1.5-pro')
@@ -137,8 +131,13 @@ async def submit_doctor_profile(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    if current_user.role != "doctor":
-        raise HTTPException(status_code=403, detail="Not authorized to submit doctor profile")
+    input_data = {
+        "user": {"role": current_user.role},
+        "action": "submit_doctor_info",
+        "resource": "doctors_database"
+    }
+    if not check_permissions(input_data):
+       raise HTTPException(status_code=403, detail="Not authorized to submit doctor info")
 
     existing_profile = db.query(DoctorProfile).filter(DoctorProfile.email == email).first()
     if existing_profile:
@@ -182,11 +181,10 @@ async def get_doctors(db: Session = Depends(get_db), current_user: User = Depend
     input_data = {
         "user": {"role": current_user.role},
         "action": "view",
-        "resource": "doctors"
+        "resource": "doctors_database"
     }
     if not check_permissions(input_data):
-        pass
-        # raise HTTPException(status_code=403, detail="Not authorized to view doctors")
+       raise HTTPException(status_code=403, detail="Not authorized to view doctors")
 
     doctors = db.query(DoctorProfile).all()
     
@@ -215,3 +213,19 @@ async def get_doctors(db: Session = Depends(get_db), current_user: User = Depend
         doctor_list.append(doctor_dict)
 
     return doctor_list
+
+@app.post("/policy_verification")
+async def policy_verification(
+    request: PolicyVerificationRequest,
+    current_user: User = Depends(get_current_user)
+):
+    input_data = {
+        "user": {"role": current_user.role},
+        "severity": request.severity,
+        "action": "read",
+        "resource": request.resource
+    }
+    if check_permissions(input_data):
+        return {"allowed": True}
+    else:
+        return {"allowed": False}
