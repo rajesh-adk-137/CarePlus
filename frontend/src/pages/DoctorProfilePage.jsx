@@ -23,30 +23,32 @@ const DoctorProfilePage = () => {
         setError('Authentication failed. Please log in again.');
         return;
       }
-
+  
       const formData = new FormData();
-      formData.append('fullName', fullName);
+      formData.append('full_name', fullName); // updated to match backend parameter name
       formData.append('expertise', expertise);
       formData.append('email', email);
       formData.append('experience', experience);
       if (profilePicture) {
-        formData.append('profilePicture', profilePicture);
+        formData.append('profile_picture', profilePicture); // updated to match backend parameter name
       }
-
+  
       const response = await axios.post('http://localhost:8000/doctor', formData, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
         }
       });
-
+  
       if (response.status === 200) {
+        localStorage.removeItem('token');
         navigate('/');
       }
     } catch (err) {
       setError('Failed to update profile. Please try again.');
     }
   };
+  
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100 text-black">

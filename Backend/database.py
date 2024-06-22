@@ -20,6 +20,15 @@ class User(Base):
     hashed_password = Column(String)
     role = Column(String)
 
+class DoctorProfile(Base):
+    __tablename__ = 'doctor_profiles'
+    id = Column(Integer, primary_key=True, index=True)
+    full_name = Column(String, nullable=False)
+    expertise = Column(String, nullable=False)
+    email = Column(String, unique=True, index=True, nullable=False)
+    experience = Column(Integer, nullable=False)
+    profile_picture = Column(String, nullable=True)  # Assuming it's a path to the image
+
 Base.metadata.create_all(bind=engine)
 
 def get_db():

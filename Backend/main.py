@@ -1,14 +1,16 @@
-from fastapi import FastAPI, Depends, HTTPException, Form
+from fastapi import FastAPI, Depends, HTTPException, Form, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from auth import UserCreate, UserLogin, Token, signup, login, get_db, get_current_user
-from database import User
+from database import User,DoctorProfile, get_db
 import requests
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
-import json
+from sqlalchemy.orm import Session
+
+import shutil
 
 # Load environment variables
 load_dotenv()
@@ -106,3 +108,54 @@ async def classify_and_respond_with_gemini(age, gender, symptoms, duration, feel
     
     response_detailed = result.text
     return response_detailed
+
+@app.post("/doctor")
+async def submit_doctor_profile(
+    full_name: str = Form(...),
+    expertise: str = Form(...),
+    email: str = Form(...),
+    experience: int = Form(...),
+    profile_picture: UploadFile = File(None),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "doctor":
+        raise HTTPException(status_code=403, detail="Not authorized to submit doctor profile")
+
+    existing_profile = db.query(DoctorProfile).filter(DoctorProfile.email == email).first()
+    if existing_profile:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    profile_picture_path = None
+    if profile_picture:
+        profile_picture_path = f"profiles/{profile_picture.filename}"
+        with open(profile_picture_path, "wb") as buffer:
+            shutil.copyfileobj(profile_picture.file, buffer)
+
+    doctor_profile = DoctorProfile(
+        full_name=full_name,
+        expertise=expertise,
+        email=email,
+        experience=experience,
+        profile_picture=profile_picture_path
+    )
+    db.add(doctor_profile)
+    db.commit()
+    db.refresh(doctor_profile)
+
+    return {"message": "Doctor profile created successfully"}
+
+
+@app.get("/doctors")
+async def get_doctors(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    input_data = {
+        "user": {"role": current_user.role},
+        "action": "view",
+        "resource": "doctors"
+    }
+    if not check_permissions(input_data):
+        pass
+        # raise HTTPException(status_code=403, detail="Not authorized to view doctors")
+
+    doctors = db.query(DoctorProfile).all()
+    return doctors
