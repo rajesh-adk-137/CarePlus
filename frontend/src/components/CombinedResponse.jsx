@@ -1,13 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const CombinedResponse = ({ responseData }) => {
-  const { symptoms_analysis, severity, immediate_remedies } = responseData;
+const CombinedResponse = ({ responsedData }) => {
+  const { symptoms_analysis, severity, immediate_remedies } = responsedData;
 
   const getSeverityColor = (severity) => {
     switch (severity.toLowerCase()) {
       case 'mild':
-        return 'border-green-300';
+        return 'border-green-500';
       case 'severe':
         return 'border-yellow-300';
       case 'extreme':
@@ -104,7 +104,7 @@ const CombinedResponse = ({ responseData }) => {
     {severity.toLowerCase() === 'mild' ? (
       <p>Remember to consult with the pharmacist if you plan to take any medicines or if you are on other medications.</p>
     ) : (
-      <p  className= "text-yellow-600">It is recommended you contact one of our recommended doctors below and get comprehensive expertise.</p>
+      <p  className= "text-yellow-700">It is recommended you contact one of our recommended doctors below and get comprehensive expertise.</p>
     )}
   </motion.div>
 )}

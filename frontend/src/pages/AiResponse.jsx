@@ -11,11 +11,12 @@ import ExtremeResponse from '../components/ExtremeResponse';
 const AiResponse = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { responseData } = location.state || {};
-  const severity = responseData?.severity;
+  const { responsedData } = location.state || {};
+  const severity = responsedData?.severity;
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('role');
     if (!token) {
       alert('You are not logged in.');
       navigate('/');
@@ -23,27 +24,27 @@ const AiResponse = () => {
   }, [navigate]);
 
   const renderContent = () => {
-    if (!responseData) {
+    if (!responsedData) {
       return <Typography>Loading error.Try resubmitting the form</Typography>;
     }
 
     if (severity === 'mild') {
-      return <CombinedResponse responseData={responseData} />;
+      return <CombinedResponse responsedData={responsedData} />;
     } else if (severity === 'severe') {
       return (
         <>
-          <CombinedResponse responseData={responseData} />
+          <CombinedResponse responsedData={responsedData} />
           <Box mt={4}>
-            <DoctorsList responseData={responseData} />
+            <DoctorsList responsedData={responsedData} />
           </Box>
         </>
       );
     } else if (severity === 'extreme') {
       return (
         <>
-          <ExtremeResponse responseData={responseData} />
+          <ExtremeResponse responsedData={responsedData} />
           <Box mt={4}>
-            <DoctorsList responseData={responseData} />
+            <DoctorsList responsedData={responsedData} />
           </Box>
         </>
       );

@@ -23,23 +23,23 @@ const DoctorProfilePage = () => {
         setError('Authentication failed. Please log in again.');
         return;
       }
-  
+
       const formData = new FormData();
-      formData.append('full_name', fullName); // updated to match backend parameter name
+      formData.append('full_name', fullName);
       formData.append('expertise', expertise);
       formData.append('email', email);
       formData.append('experience', experience);
       if (profilePicture) {
-        formData.append('profile_picture', profilePicture); // updated to match backend parameter name
+        formData.append('profile_picture', profilePicture);
       }
-  
+
       const response = await axios.post('http://localhost:8000/doctor', formData, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
         }
       });
-  
+
       if (response.status === 200) {
         localStorage.removeItem('token');
         navigate('/');
@@ -48,7 +48,6 @@ const DoctorProfilePage = () => {
       setError('Failed to update profile. Please try again.');
     }
   };
-  
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100 text-black">
@@ -84,20 +83,19 @@ const DoctorProfilePage = () => {
                 onChange={(e) => setExpertise(e.target.value)}
                 required
               >
-              <option value="">Select Expertise</option>
-      <option value="General Physician">General Physician</option>
-      <option value="Cardiology">Cardiology</option>
-      <option value="Neurology">Neurology</option>
-      <option value="Pediatrics">Pediatrics</option>
-      <option value="Orthopedics">Orthopedics</option>
-      <option value="Dermatology">Dermatology</option>
-      <option value="Gastroenterology">Gastroenterology</option>
-      <option value="Oncology">Oncology</option>
-      <option value="Psychiatry">Psychiatry</option>
-      <option value="Allergist">Allergist</option>
-      <option value="Ophthalmology">Ophthalmology</option>
-      <option value="Radiology">Radiology</option>
-
+                <option value="">Select Expertise</option>
+                <option value="General Physician">General Physician</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Neurology">Neurology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="Orthopedics">Orthopedics</option>
+                <option value="Dermatology">Dermatology</option>
+                <option value="Gastroenterology">Gastroenterology</option>
+                <option value="Oncology">Oncology</option>
+                <option value="Psychiatry">Psychiatry</option>
+                <option value="Allergist">Allergist</option>
+                <option value="Ophthalmology">Ophthalmology</option>
+                <option value="Radiology">Radiology</option>
               </select>
             </div>
             <div>

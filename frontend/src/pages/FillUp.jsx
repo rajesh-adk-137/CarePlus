@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 
 const FillUp = () => {
-  const [age, setAge] = useState('');
+  const [age, setAge] = useState(20);
   const [gender, setGender] = useState('');
   const [symptoms, setSymptoms] = useState('');
   const [duration, setDuration] = useState(0);
@@ -40,9 +40,9 @@ const FillUp = () => {
       );
 
       if (response.status === 200) {
-        const responseData = JSON.parse(response.data.response);
-        console.log(responseData)
-        navigate(`/response`, { state: { responseData } });
+        const responsedData = JSON.parse(response.data.response);
+        console.log(responsedData)
+        navigate(`/response`, { state: { responsedData } });
       }
     } catch (err) {
       setError('Failed to submit symptoms. Please try again.');
@@ -50,6 +50,8 @@ const FillUp = () => {
       setLoading(false); // Set loading to false after the request is finished
     }
   };
+
+
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100 text-black">

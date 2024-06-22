@@ -1,11 +1,16 @@
+
+
+
+
+
 import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea, Grid, Button, Box, Chip } from '@mui/material';
+import { CardActionArea, Button, Box, Chip } from '@mui/material';
 
-const DoctorCard = ({ name, expertise, description, email, isRecommended, experience }) => {
+const DoctorCard = ({ name, expertise, description, email, isRecommended, experience, profilePicture }) => {
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(email).then(() => {
       alert('Email copied to clipboard!');
@@ -35,7 +40,7 @@ const DoctorCard = ({ name, expertise, description, email, isRecommended, experi
           component="img"
           height="120"
           width="120"
-          image="/src/assets/images/R.png"
+          image={profilePicture || "/src/assets/images/doct.png"} // Use the actual image URL or default image
           alt={name}
           sx={{ 
             objectFit: 'cover',

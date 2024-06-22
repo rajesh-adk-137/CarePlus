@@ -6,11 +6,13 @@ from auth import UserCreate, UserLogin, Token, signup, login, get_db, get_curren
 from database import User,DoctorProfile, get_db
 import requests
 import os
+from PIL import Image
 from dotenv import load_dotenv
 import google.generativeai as genai
 from sqlalchemy.orm import Session
-
 import shutil
+import base64
+from io import BytesIO
 
 # Load environment variables
 load_dotenv()
@@ -68,8 +70,6 @@ async def submit_symptoms(
     
     # Use Gemini AI to classify severity
     response = await classify_and_respond_with_gemini(age, gender, symptoms, duration, feeling)
-    print(response)
-    print("good")
     response = response.strip("```json\n```")
     print(response)
     return JSONResponse({"response": response})
@@ -83,18 +83,36 @@ async def classify_and_respond_with_gemini(age, gender, symptoms, duration, feel
     Given the following patient information:
     Age: {age}
     Gender: {gender}
-    Symptoms: {symptoms} description by the patient, can be symptoms or nature of illness
+    Symptoms: {symptoms} (description by the patient; can be symptoms or nature of illness)
     Duration: {duration} days
-    Pain Rating: {feeling} (scale of 1 to 10, 1 being fine, 10 being extremely bad)
+    Pain Rating: {feeling} (scale of 1 to 10, 1 being fine, 10 being feeling extremely bad)
     
-    Provide the following details in JSON format as you are talking to the patient as an expert system, strictly provide the JSON format, no extra information please, rememeber you are replying to the patient, also if you don't have respose for each reply field, keep it empty, but never divert from json format:
-    - Symptom Analysis 'symptoms_analysis' : A brief overview of the symptoms described and potential cause or disease, in array format in few points
-    - Categorize the illness in terms of severity 'severity': mild, severe, extreme.<if you think it is more than mild, just return severe>
-    - Immediate Remedies as array of 'immediate_remedies' with following 3 arrays inside:
-      - Medications as first array 'medication': Over-the-counter medications or prescribed drugs (leave empty for extreme cases).
-      - Home Remedies as second array 'home_remedies': Tips on rest, hydration, and diet (leave empty for extreme cases).
-      - Things to Avoid as third array 'avoid': Foods, activities, or behaviors to avoid.
-    - Potential Doctor to Consult 'doctor': Types of specialists or primary care physicians relevant to the symptoms from one of these, select one which is closest: Neurology, Cardiology, Pediatrics, Orthopedics, Dermatology, Gastroenterology, Oncology, Psychiatry, Allergist,Ophthalmology,Radiology or General Physician"""
+    Provide the following details in strict JSON format. You are an expert system responding to the patient, so only provide the JSON format with no extra information. Remember, if you don't have a response for any field, leave it empty but never divert from the JSON format:
+    
+    {{
+      "symptoms_analysis": ["Symptom analysis and potential causes in array format. Each analysis in a separate string."],
+      "severity": "Categorize the illness as 'mild', 'severe', or 'extreme'. If it is more than mild, just return 'severe'.",
+      "immediate_remedies": {{
+        "medication": ["Over-the-counter medications or prescribed drugs. Leave empty for extreme cases."],
+        "home_remedies": ["Tips on rest, hydration, and diet. Leave empty for extreme cases."],
+        "avoid": ["Foods, activities, or behaviors to avoid."]
+      }},
+      "doctor": "Types of specialists or primary care physicians relevant to the symptoms. Choose one closest from: Neurology, Cardiology, Pediatrics, Orthopedics, Dermatology, Gastroenterology, Oncology, Psychiatry, Allergist, Ophthalmology, Radiology, General Physician."
+    }}
+    
+    Example of expected JSON format:
+    {{
+      "symptoms_analysis": ["Possible cause 1", "Possible cause 2"],
+      "severity": "severe",
+      "immediate_remedies": {{
+        "medication": ["Medication 1", "Medication 2"],
+        "home_remedies": ["Rest", "Hydration", "Balanced diet"],
+        "avoid": ["Avoid spicy foods", "Avoid strenuous activity"]
+      }},
+      "doctor": "Gastroenterology"
+    }}
+    """
+
 
     api_key = os.getenv("API_KEY")
     genai.configure(api_key=api_key)
@@ -128,9 +146,23 @@ async def submit_doctor_profile(
 
     profile_picture_path = None
     if profile_picture:
-        profile_picture_path = f"profiles/{profile_picture.filename}"
-        with open(profile_picture_path, "wb") as buffer:
+        profile_directory = "profiles"
+        os.makedirs(profile_directory, exist_ok=True)
+        profile_picture_path = os.path.join(profile_directory, profile_picture.filename)
+        
+        # Save the uploaded image temporarily
+        temp_path = os.path.join(profile_directory, "temp_" + profile_picture.filename)
+        with open(temp_path, "wb") as buffer:
             shutil.copyfileobj(profile_picture.file, buffer)
+        
+        # Open the image and resize it
+        with Image.open(temp_path) as img:
+            img = img.convert("RGB")  # Convert to RGB if necessary
+            img = img.resize((120, 120))  # Resize the image to 120x120
+            img.save(profile_picture_path)  # Save the resized image
+        
+        # Remove the temporary file
+        os.remove(temp_path)
 
     doctor_profile = DoctorProfile(
         full_name=full_name,
@@ -145,7 +177,6 @@ async def submit_doctor_profile(
 
     return {"message": "Doctor profile created successfully"}
 
-
 @app.get("/doctors")
 async def get_doctors(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     input_data = {
@@ -158,4 +189,29 @@ async def get_doctors(db: Session = Depends(get_db), current_user: User = Depend
         # raise HTTPException(status_code=403, detail="Not authorized to view doctors")
 
     doctors = db.query(DoctorProfile).all()
-    return doctors
+    
+    doctor_list = []
+    for doctor in doctors:
+        doctor_dict = {
+            "id": doctor.id,
+            "full_name": doctor.full_name,
+            "expertise": doctor.expertise,
+            "email": doctor.email,
+            "experience": doctor.experience,
+            "profile_picture": None
+        }
+        
+        if doctor.profile_picture and os.path.exists(doctor.profile_picture):
+            with open(doctor.profile_picture, "rb") as img_file:
+                img_data = img_file.read()
+                img = Image.open(BytesIO(img_data))
+                img = img.convert("RGB")
+                img = img.resize((120, 120))
+                buffered = BytesIO()
+                img.save(buffered, format="JPEG")
+                img_str = base64.b64encode(buffered.getvalue()).decode()
+                doctor_dict["profile_picture"] = f"data:image/jpeg;base64,{img_str}"
+        
+        doctor_list.append(doctor_dict)
+
+    return doctor_list

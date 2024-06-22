@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Grid, Typography, Box } from '@mui/material';
+import { Grid, Typography, Box, CircularProgress } from '@mui/material';
 import DoctorCard from './DoctorCard';
 
-const DoctorsList = ({ responseData }) => {
+const DoctorsList = ({ responsedData }) => {
   const [doctors, setDoctors] = useState([]);
-  const recommendedExpertise = responseData['doctor'];
+  const [loading, setLoading] = useState(true);
+  const recommendedExpertise = responsedData['doctor'];
 
   useEffect(() => {
     const fetchDoctors = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
         console.error('No token found');
+        setLoading(false);
         return;
       }
 
@@ -22,9 +24,11 @@ const DoctorsList = ({ responseData }) => {
           }
         });
         setDoctors(response.data);
+        setLoading(false);
         console.log(response.data);
       } catch (error) {
         console.error('Error fetching doctors:', error);
+        setLoading(false);
       }
     };
 
@@ -46,6 +50,14 @@ const DoctorsList = ({ responseData }) => {
     "Radiology": "Medical imaging and diagnostic expert"
   };
 
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ 
       width: '100%', 
@@ -66,6 +78,7 @@ const DoctorsList = ({ responseData }) => {
               description={expertiseDescriptions[doctor.expertise] || "No description available"}
               email={doctor.email}
               experience={doctor.experience}
+              profilePicture={doctor.profile_picture} // Pass the profile picture URL
               isRecommended={doctor.expertise.toLowerCase() === recommendedExpertise.toLowerCase()}
             />
           </Grid>
