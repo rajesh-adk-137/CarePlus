@@ -21,9 +21,11 @@
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
 - [Installation](#installation)
-  - [Virtual Environment Setup](#virtual-environment-setup)
-  - [Frontend Setup](#frontend-setup)
   - [Backend Setup](#backend-setup)
+    - [Virtual Environment Setup](#virtual-environment-setup)
+    - [Initialize Policies as Git Repository](#initialize-policies-as-git-repository)
+    - [Docker Setup](#docker-setup)
+  - [Frontend Setup](#frontend-setup)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
@@ -58,29 +60,69 @@ To get started with CarePlus, you'll need to set up both the frontend and backen
 
 ## Installation
 
-### Virtual Environment Setup
+### Backend Setup
 
-Setting up a virtual environment is recommended before proceeding with Docker setup:
+1. Ensure you have Docker installed on your system. For Windows users, install Docker Desktop.
 
-1. Install `virtualenv` if you haven't already:
+2. Navigate to the backend directory:
    ```bash
-   pip install virtualenv
+   cd CarePlus/backend
    ```
 
-2. Create a virtual environment:
+3. Setting up a virtual environment (recommended):
+   - Install `virtualenv` if you haven't already:
+     ```bash
+     pip install virtualenv
+     ```
+
+   - Create a virtual environment:
+     ```bash
+     virtualenv venv
+     ```
+
+   - Activate the virtual environment:
+     - On Windows:
+       ```bash
+       venv\Scripts\activate
+       ```
+     - On macOS and Linux:
+       ```bash
+       source venv/bin/activate
+       ```
+
+4. Initialize Policies folder as a Git repository:
    ```bash
-   virtualenv venv
+   cd Policies
+   git init
+   git add .
+   git commit -m "Initial commit"
+   cd ..
    ```
 
-3. Activate the virtual environment:
-   - On Windows:
-     ```bash
-     venv\Scripts\activate
-     ```
-   - On macOS and Linux:
-     ```bash
-     source venv/bin/activate
-     ```
+5. Create a `.env` file in the backend directory with the following content:
+   ```
+   DATABASE_URL=sqlite:///./test.db
+   SECRET_KEY=thiswillalsowork
+   OPAL_SERVER_URL=http://opal_server:7002
+   OPA_SERVER_URL=http://opa:8181
+   API_KEY=YOUR_GEMINI_API_KEY
+   ```
+   Replace `YOUR_GEMINI_API_KEY` with your actual Gemini API key.
+
+6. Build and start the Docker containers:
+   ```bash
+   docker compose up --build
+   ```
+
+   For subsequent runs, you can simply use:
+   ```bash
+   docker compose up
+   ```
+
+   To stop the containers:
+   ```bash
+   docker compose down
+   ```
 
 ### Frontend Setup
 
@@ -102,40 +144,6 @@ Setting up a virtual environment is recommended before proceeding with Docker se
 4. Start the development server:
    ```bash
    yarn run dev
-   ```
-
-### Backend Setup
-
-1. Ensure you have Docker installed on your system. For Windows users, install Docker Desktop.
-
-2. Navigate to the backend directory:
-   ```bash
-   cd CarePlus/backend
-   ```
-
-3. Create a `.env` file in the backend directory with the following content:
-   ```
-   DATABASE_URL=sqlite:///./test.db
-   SECRET_KEY=thiswillalsowork
-   OPAL_SERVER_URL=http://opal_server:7002
-   OPA_SERVER_URL=http://opa:8181
-   API_KEY=YOUR_GEMINI_API_KEY
-   ```
-   Replace `YOUR_GEMINI_API_KEY` with your actual Gemini API key.
-
-4. Build and start the Docker containers:
-   ```bash
-   docker compose up --build
-   ```
-
-   For subsequent runs, you can simply use:
-   ```bash
-   docker compose up
-   ```
-
-   To stop the containers:
-   ```bash
-   docker compose down
    ```
 
 ## Usage
