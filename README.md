@@ -1,4 +1,4 @@
-```markdown
+---
 # CarePlus: AI-Powered Healthcare Management System
 
 <p align="center">
