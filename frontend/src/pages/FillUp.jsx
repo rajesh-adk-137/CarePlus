@@ -111,7 +111,7 @@ const FillUp = () => {
               />
             </div>
             <div>
-              <label className="block mb-2 font-medium text-gray-700" htmlFor="feeling">Current Feeling (1-10)</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="feeling">Discomfort Level (1-10)</label>
               <input
                 type="range"
                 id="feeling"

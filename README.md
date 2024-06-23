@@ -21,6 +21,7 @@
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
 - [Installation](#installation)
+  - [Virtual Environment Setup](#virtual-environment-setup)
   - [Frontend Setup](#frontend-setup)
   - [Backend Setup](#backend-setup)
 - [Usage](#usage)
@@ -56,6 +57,30 @@ CarePlus is an innovative healthcare management system that leverages AI to prov
 To get started with CarePlus, you'll need to set up both the frontend and backend components of the application.
 
 ## Installation
+
+### Virtual Environment Setup
+
+Setting up a virtual environment is recommended before proceeding with Docker setup:
+
+1. Install `virtualenv` if you haven't already:
+   ```bash
+   pip install virtualenv
+   ```
+
+2. Create a virtual environment:
+   ```bash
+   virtualenv venv
+   ```
+
+3. Activate the virtual environment:
+   - On Windows:
+     ```bash
+     venv\Scripts\activate
+     ```
+   - On macOS and Linux:
+     ```bash
+     source venv/bin/activate
+     ```
 
 ### Frontend Setup
 
@@ -140,4 +165,3 @@ We welcome contributions to CarePlus! If you'd like to contribute, please follow
 This project is licensed under the [MIT License](LICENSE).
 
 ---
-```
