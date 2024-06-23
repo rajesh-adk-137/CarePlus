@@ -83,7 +83,7 @@ const AiResponse = () => {
   };
 
   return (
-    <Box className="min-h-screen flex flex-col bg-gray-100 text-black">
+    <Box className="min-h-screen flex flex-col  bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 text-black">
       <CssBaseline />
       <Box className="bg-black text-white">
         <Navbar />

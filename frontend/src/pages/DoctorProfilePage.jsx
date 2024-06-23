@@ -50,35 +50,33 @@ const DoctorProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100 text-black">
-      <div className="bg-black text-white">
-        <Navbar />
-      </div>
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300">
+      <Navbar />
       <motion.div
-        className="flex-grow flex items-center justify-center mt-20"
+        className="flex-grow flex items-center justify-center py-10"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 0.5 }}
       >
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
-          <h2 className="text-2xl font-bold mb-6">Doctor Profile</h2>
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <h2 className="text-3xl font-bold mb-6 text-center text-[#1a237e]">Doctor Profile</h2>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="fullName">Full Name</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="fullName">Full Name</label>
               <input
                 type="text"
                 id="fullName"
-                className="w-full border border-gray-300 p-2 rounded"
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
               />
             </div>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="expertise">Field of Expertise</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="expertise">Field of Expertise</label>
               <select
                 id="expertise"
-                className="w-full border border-gray-300 p-2 rounded"
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={expertise}
                 onChange={(e) => setExpertise(e.target.value)}
                 required
@@ -99,40 +97,40 @@ const DoctorProfilePage = () => {
               </select>
             </div>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="email">Public Email</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="email">Public Email</label>
               <input
                 type="email"
                 id="email"
-                className="w-full border border-gray-300 p-2 rounded"
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="experience">Experience (Years)</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="experience">Experience (Years)</label>
               <input
                 type="number"
                 id="experience"
-                className="w-full border border-gray-300 p-2 rounded"
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={experience}
                 onChange={(e) => setExperience(e.target.value)}
                 required
               />
             </div>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="profilePicture">Profile Picture</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="profilePicture">Profile Picture</label>
               <input
                 type="file"
                 id="profilePicture"
-                className="w-full border border-gray-300 p-2 rounded"
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onChange={(e) => setProfilePicture(e.target.files[0])}
               />
             </div>
-            {error && <p className="text-red-500">{error}</p>}
+            {error && <p className="text-red-500 text-center">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-500"
+              className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               Submit
             </button>

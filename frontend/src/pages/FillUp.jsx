@@ -12,12 +12,12 @@ const FillUp = () => {
   const [duration, setDuration] = useState(0);
   const [feeling, setFeeling] = useState(5);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true when the form is submitted
+    setLoading(true);
     try {
       setError('');
       const token = localStorage.getItem('token');
@@ -47,42 +47,37 @@ const FillUp = () => {
     } catch (err) {
       setError('Failed to submit symptoms. Please try again.');
     } finally {
-      setLoading(false); // Set loading to false after the request is finished
+      setLoading(false);
     }
   };
-
-
-
-  return (
-    <div className="min-h-screen flex flex-col bg-gray-100 text-black">
-      <div className="bg-black text-white">
-        <Navbar />
-      </div>
+ return (
+    <div className="min-h-screen flex flex-col  bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300">
+      <Navbar />
       <motion.div
-        className="flex-grow flex items-center justify-center mt-20"
+        className="flex-grow flex items-center justify-center py-10"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 0.5 }}
       >
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
-          <h2 className="text-2xl font-bold mb-6">Fill Up Your Symptoms</h2>
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <h2 className="text-3xl font-bold mb-6 text-center text-[#1a237e]">Describe Your Illness</h2>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="age">Age</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="age">Age</label>
               <input
                 type="number"
                 id="age"
-                className="w-full border border-gray-300 p-2 rounded"
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
                 required
               />
             </div>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="gender">Gender</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="gender">Gender</label>
               <select
                 id="gender"
-                className="w-full border border-gray-300 p-2 rounded"
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
                 required
@@ -94,44 +89,45 @@ const FillUp = () => {
               </select>
             </div>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="symptoms">Description of Symptoms</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="symptoms">Description of Symptoms</label>
               <textarea
                 id="symptoms"
-                className="w-full border border-gray-300 p-2 rounded"
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows="4"
                 value={symptoms}
                 onChange={(e) => setSymptoms(e.target.value)}
                 required
               />
             </div>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="duration">Duration of Symptoms (in days)</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="duration">Duration of Symptoms (in days)</label>
               <input
                 type="number"
                 id="duration"
-                className="w-full border border-gray-300 p-2 rounded"
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
                 required
               />
             </div>
             <div>
-              <label className="block mb-1 font-medium" htmlFor="feeling">Current Feeling (1-10)</label>
+              <label className="block mb-2 font-medium text-gray-700" htmlFor="feeling">Current Feeling (1-10)</label>
               <input
                 type="range"
                 id="feeling"
                 min="1"
                 max="10"
-                className="w-full"
+                className="w-full accent-blue-500"
                 value={feeling}
                 onChange={(e) => setFeeling(e.target.value)}
               />
-              <div className="text-center">{feeling}</div>
+              <div className="text-center text-gray-700 font-bold mt-2">{feeling}</div>
             </div>
-            {error && <p className="text-red-500">{error}</p>}
+            {error && <p className="text-red-500 text-center">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-500"
-              disabled={loading} // Disable button when loading
+              className="w-full bg-blue-500  text-white p-3 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
+              disabled={loading}
             >
               {loading ? 'Submitting...' : 'Submit'}
             </button>
@@ -143,7 +139,7 @@ const FillUp = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="loader">Loading Response...</div>
+              <div className="loader text-blue-500">Loading Response...</div>
             </motion.div>
           )}
         </div>
