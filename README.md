@@ -1,31 +1,17 @@
-
-
 ```markdown
 # CarePlus: AI-Powered Healthcare Management System
 
 <p align="center">
-<a href="https://github.com/rajesh-adk-137/CarePlus/" target="blank">
-<img src="https://img.shields.io/github/watchers/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="Watchers"/>
-</a>
-<a href="https://github.com/rajesh-adk-137/CarePlus/fork" target="blank">
-<img src="https://img.shields.io/github/forks/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="Forks"/>
-</a>
-<a href="https://github.com/rajesh-adk-137/CarePlus/stargazers" target="blank">
-<img src="https://img.shields.io/github/stars/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="Star"/>
-</a>
+  <a href="https://github.com/rajesh-adk-137/CarePlus/" target="blank"><img src="https://img.shields.io/github/watchers/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="Watchers"/></a>
+  <a href="https://github.com/rajesh-adk-137/CarePlus/fork" target="blank"><img src="https://img.shields.io/github/forks/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="Forks"/></a>
+  <a href="https://github.com/rajesh-adk-137/CarePlus/stargazers" target="blank"><img src="https://img.shields.io/github/stars/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="Star"/></a>
 </p>
 <p align="center">
-<a href="https://github.com/rajesh-adk-137/CarePlus/issues" target="blank">
-<img src="https://img.shields.io/github/issues/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="Issue"/>
-</a>
-<a href="https://github.com/rajesh-adk-137/CarePlus/pulls" target="blank">
-<img src="https://img.shields.io/github/issues-pr/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="Open Pull Request"/>
-</a>
+  <a href="https://github.com/rajesh-adk-137/CarePlus/issues" target="blank"><img src="https://img.shields.io/github/issues/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="Issue"/></a>
+  <a href="https://github.com/rajesh-adk-137/CarePlus/pulls" target="blank"><img src="https://img.shields.io/github/issues-pr/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="Open Pull Request"/></a>
 </p>
 <p align="center">
-<a href="https://github.com/rajesh-adk-137/CarePlus/blob/master/LICENSE" target="blank">
-<img src="https://img.shields.io/github/license/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="License" />
-</a>
+  <a href="https://github.com/rajesh-adk-137/CarePlus/blob/master/LICENSE" target="blank"><img src="https://img.shields.io/github/license/rajesh-adk-137/CarePlus?style=for-the-badge&logo=appveyor" alt="License" /></a>
 </p>
 
 ## Table of Contents
@@ -155,4 +141,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 ```
-
