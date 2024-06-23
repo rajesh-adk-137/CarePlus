@@ -57,7 +57,7 @@ const HeroSection = () => {
                             Intelligent Healthcare, Anytime, Anywhere
                         </motion.h1>
                         <motion.p 
-                            className="text-xl mb-8 text-gray-600"
+                            className=" mb-8 text-gray-600"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.6, duration: 0.5 }}
@@ -65,7 +65,7 @@ const HeroSection = () => {
                             Empower your health journey with AI-driven insights and personalized care. CarePlus provides you with comprehensive health analysis, immediate remedies, and professional medical support tailored to your needs.
                         </motion.p>
                         <motion.p 
-                            className="text-xl mb-8 text-gray-600"
+                            className=" mb-8 text-gray-600"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.8, duration: 0.5 }}

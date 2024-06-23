@@ -157,7 +157,7 @@ async def submit_doctor_profile(
         # Open the image and resize it
         with Image.open(temp_path) as img:
             img = img.convert("RGB")  # Convert to RGB if necessary
-            img = img.resize((120, 120))  # Resize the image to 120x120
+            img = img.resize((500, 500))  # Resize the image to 120x120
             img.save(profile_picture_path)  # Save the resized image
         
         # Remove the temporary file

@@ -21,7 +21,7 @@ const Footer = () => {
                                 Care<span className='text-[#00ff9d]'>Plus</span>
                             </motion.div>
                         </Link>
-                        <p className="text-gray-300 mb-4 max-w-md">Empowering your health journey with AI-driven insights and personalized care.</p>
+                        <p className="text-gray-300 mb-4 max-w-md">CarePlus offers symptom analysis, severity assessment, and doctor recommendations.</p>
                         <div className="flex space-x-4">
                             <SocialIcon Icon={FaFacebook} />
                             <SocialIcon Icon={FaInstagram} />
@@ -31,14 +31,15 @@ const Footer = () => {
                         </div>
                     </div>
                     <div>
-                        <h3 className="text-xl font-semibold mb-4 text-center md:text-right">Quick Links</h3>
-                        <ul className="flex space-x-6">
-                            <FooterLink icon={<FaHome />} text="Home" to="/" />
-                            <FooterLink icon={<FaInfoCircle />} text="About" to="/about" />
-                            <FooterLink icon={<FaEnvelope />} text="Contact" to="/contact" />
-                            <FooterLink icon={<FaQuestionCircle />} text="FAQ" to="/faq" />
-                        </ul>
-                    </div>
+    <h3 className="text-xl font-semibold mb-4 text-center md:text-right">Quick Links</h3>
+    <ul className="flex space-x-6">
+        <FooterLink icon={<FaInfoCircle />} text="Features" to="/about" />
+        <FooterLink icon={< FaQuestionCircle/>} text="Opal" to="https://github.com/permitio/opal" />
+        <FooterLink icon={<FaEnvelope />} text="Feedback" to="https://github.com/rajesh-adk-137" />
+        <FooterLink icon={<FaQuestionCircle />} text="Quira" to="https://quira.sh/" />
+    </ul>
+</div>
+
                 </div>
                 <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
                     © {new Date().getFullYear()} CarePlus. All rights reserved.

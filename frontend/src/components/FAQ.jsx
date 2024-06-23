@@ -83,7 +83,7 @@ const FAQ = () => {
                     transition={{ duration: 0.5 }}
                 >
                     <motion.span
-                        className="bg-gradient-to-br from-yellow-100 via-yellow-150 to-yellow-200 px-4 py-1 rounded inline-block"
+                        className="bg-gradient-to-br from-blue-100 via-blue-150 to-blue-200 px-4 py-1 rounded inline-block"
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                     >

@@ -62,17 +62,17 @@ export default function AboutPage() {
                                     ))}
                                 </ul>
                                 <div className="flex flex-wrap gap-4">
-                                    <motion.div whileHover={{ scale: 1.005 }} transition={{ duration: 0.3 }}>
+                                    <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
                                         <Link
-                                            className="inline-flex items-center justify-center rounded-md bg-[#0d0f2f] px-6 py-3 text-lg text-white font-medium shadow-lg transition-colors hover:bg-[#1a1c4a] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0f2f]"
+                                            className="inline-flex items-center justify-center rounded-md bg-[#0d0f2f] px-6 py-3 text-lg text-white font-medium shadow-lg transition-colors hover:bg-[#1a1c4a] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0f2f] mb-4"
                                             to='/auth'
                                         >
                                             Get Started
                                         </Link>
                                     </motion.div>
-                                    <motion.div whileHover={{ scale: 1.005 }} transition={{ duration: 0.3 }}>
+                                    <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
                                         <Link
-                                            className="inline-flex items-center justify-center rounded-md border border-[#0d0f2f] bg-white px-6 py-3 text-lg font-medium text-[#0d0f2f] shadow-lg transition-colors hover:bg-[#e6e6fa] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0f2f]"
+                                            className="inline-flex items-center justify-center rounded-md border border-[#0d0f2f] bg-white px-6 py-3 text-lg font-medium text-[#0d0f2f] shadow-lg transition-colors hover:bg-[#e6e6fa] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d0f2f] mb-4"
                                             to='/'
                                         >
                                             Learn More
@@ -126,7 +126,7 @@ export default function AboutPage() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.5 }}
                         >
-                            Your Health, Our Priority
+                            Your Wellbeing, Our Goal
                         </motion.h2>
                         <motion.p 
                             className="max-w-2xl mx-auto text-lg text-gray-600 mb-12"
@@ -139,7 +139,7 @@ export default function AboutPage() {
                         </motion.p>
                         <motion.div whileHover={{ scale: 1.004 }} transition={{ duration: 0.3 }}>
                             <Link
-                                className="inline-flex items-center justify-center rounded-md bg-[#00ff9d] px-6 py-3 text-lg text-[#0d0f2f] font-medium shadow-lg transition-colors hover:bg-[#00cc7d] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00ff9d]"
+                                className="inline-flex items-center justify-center rounded-md bg-green-400 px-6 py-3 text-lg text-[#0d0f2f] font-medium shadow-lg transition-colors hover:bg-green-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00ff9d] mb-2"
                                 to='/'
                             >
                                 Join CarePlus Today
