@@ -12,6 +12,7 @@ const DoctorProfilePage = () => {
   const [experience, setExperience] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -42,7 +43,7 @@ const DoctorProfilePage = () => {
 
       if (response.status === 200) {
         localStorage.removeItem('token');
-        navigate('/');
+        setSuccess(true);
       }
     } catch (err) {
       setError('Failed to update profile. Please try again.');
@@ -58,84 +59,97 @@ const DoctorProfilePage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
-          <h2 className="text-3xl font-bold mb-6 text-center text-[#1a237e]">Doctor Profile</h2>
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label className="block mb-2 font-medium text-gray-700" htmlFor="fullName">Full Name</label>
-              <input
-                type="text"
-                id="fullName"
-                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-2 font-medium text-gray-700" htmlFor="expertise">Field of Expertise</label>
-              <select
-                id="expertise"
-                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={expertise}
-                onChange={(e) => setExpertise(e.target.value)}
-                required
+        {!success ? (
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+            <h2 className="text-3xl font-bold mb-6 text-center text-[#1a237e]">Doctor Profile</h2>
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div>
+                <label className="block mb-2 font-medium text-gray-700" htmlFor="fullName">Full Name</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-2 font-medium text-gray-700" htmlFor="expertise">Field of Expertise</label>
+                <select
+                  id="expertise"
+                  className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={expertise}
+                  onChange={(e) => setExpertise(e.target.value)}
+                  required
+                >
+                  <option value="">Select Expertise</option>
+                  <option value="General Physician">General Physician</option>
+                  <option value="Cardiology">Cardiology</option>
+                  <option value="Neurology">Neurology</option>
+                  <option value="Pediatrics">Pediatrics</option>
+                  <option value="Orthopedics">Orthopedics</option>
+                  <option value="Dermatology">Dermatology</option>
+                  <option value="Gastroenterology">Gastroenterology</option>
+                  <option value="Oncology">Oncology</option>
+                  <option value="Psychiatry">Psychiatry</option>
+                  <option value="Allergist">Allergist</option>
+                  <option value="Ophthalmology">Ophthalmology</option>
+                  <option value="Radiology">Radiology</option>
+                </select>
+              </div>
+              <div>
+                <label className="block mb-2 font-medium text-gray-700" htmlFor="email">Public Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-2 font-medium text-gray-700" htmlFor="experience">Experience (Years)</label>
+                <input
+                  type="number"
+                  id="experience"
+                  className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={experience}
+                  onChange={(e) => setExperience(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-2 font-medium text-gray-700" htmlFor="profilePicture">Profile Picture</label>
+                <input
+                  type="file"
+                  id="profilePicture"
+                  className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onChange={(e) => setProfilePicture(e.target.files[0])}
+                />
+              </div>
+              {error && <p className="text-red-500 text-center">{error}</p>}
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                <option value="">Select Expertise</option>
-                <option value="General Physician">General Physician</option>
-                <option value="Cardiology">Cardiology</option>
-                <option value="Neurology">Neurology</option>
-                <option value="Pediatrics">Pediatrics</option>
-                <option value="Orthopedics">Orthopedics</option>
-                <option value="Dermatology">Dermatology</option>
-                <option value="Gastroenterology">Gastroenterology</option>
-                <option value="Oncology">Oncology</option>
-                <option value="Psychiatry">Psychiatry</option>
-                <option value="Allergist">Allergist</option>
-                <option value="Ophthalmology">Ophthalmology</option>
-                <option value="Radiology">Radiology</option>
-              </select>
-            </div>
-            <div>
-              <label className="block mb-2 font-medium text-gray-700" htmlFor="email">Public Email</label>
-              <input
-                type="email"
-                id="email"
-                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-2 font-medium text-gray-700" htmlFor="experience">Experience (Years)</label>
-              <input
-                type="number"
-                id="experience"
-                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={experience}
-                onChange={(e) => setExperience(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-2 font-medium text-gray-700" htmlFor="profilePicture">Profile Picture</label>
-              <input
-                type="file"
-                id="profilePicture"
-                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onChange={(e) => setProfilePicture(e.target.files[0])}
-              />
-            </div>
-            {error && <p className="text-red-500 text-center">{error}</p>}
+                Submit
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
+            <h2 className="text-3xl font-bold mb-4 text-green-500">Success!</h2>
+            <p className="mb-6">Your information is successfully included in the database.</p>
             <button
-              type="submit"
-              className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
+              onClick={() => navigate('/')}
             >
-              Submit
+              Go Back
             </button>
-          </form>
-        </div>
+          </div>
+        )}
       </motion.div>
       <Footer />
     </div>
