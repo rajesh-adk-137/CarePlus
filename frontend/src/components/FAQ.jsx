@@ -83,7 +83,7 @@ const FAQ = () => {
                     transition={{ duration: 0.5 }}
                 >
                     <motion.span
-                        className="bg-green-200 px-4 py-2 rounded inline-block"
+                        className="bg-green-200 px-4 py-1 rounded inline-block"
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                     >
@@ -97,7 +97,7 @@ const FAQ = () => {
                         ))}
                     </div>
                     <motion.div 
-                        className="lg:w-2/5 mt-8 lg:mt-0 flex justify-center items-start lg:-mt-12"
+                        className="lg:w-2/5 mt-8 lg:mt-0 flex justify-center items-start lg:-mt-16"
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                     >

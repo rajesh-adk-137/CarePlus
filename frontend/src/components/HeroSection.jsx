@@ -1,10 +1,8 @@
-
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaArrowRight } from 'react-icons/fa';
-import heroImage from "../assets/images/reflect.png";
+import heroImage from "../assets/images/hd1.png";
 
 const HeroSection = () => {
     const navigate = useNavigate();
@@ -33,7 +31,7 @@ const HeroSection = () => {
                         <img 
                             src={heroImage} 
                             alt="AI in Healthcare" 
-                            className="rounded-lg shadow-xl w-full h-auto max-w-md mx-auto"
+                            className="rounded-lg  w-full h-auto max-w-xl mx-auto mb-4" // Adjusted class for larger image and margin-bottom
                         />
                     </motion.div>
                     <motion.div 
@@ -91,6 +89,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
-
-
