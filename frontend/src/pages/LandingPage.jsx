@@ -14,10 +14,10 @@ const LandingPage = () => {
                     <HeroSection />
                 </section>
                 <motion.section
-                    initial={{ opacity: 0.1 }}
+                    initial={{ opacity: 0.8 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.5 }}
                 >
                     <FAQ />
                 </motion.section>
