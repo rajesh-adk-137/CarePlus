@@ -10,11 +10,11 @@ const LandingPage = () => {
         <div className="bg-black text-white">
             <Navbar />
             <main>
-                <section className="h-[85vh]">
+                <section >
                     <HeroSection />
                 </section>
                 <motion.section
-                    initial={{ opacity: 0.8 }}
+                    // initial={{ opacity: 0.8 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.5 }}

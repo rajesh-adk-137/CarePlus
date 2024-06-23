@@ -30,7 +30,7 @@ const FAQItem = ({ question, answer }) => {
 
     return (
         <motion.div
-            className="bg-light-blue-100 rounded-lg mb-4 overflow-hidden shadow-sm"
+            className="bg-gradient-to-br from-green-100 via-green-150 to-green-200 rounded-lg mb-4 overflow-hidden shadow-sm"
             initial={false}
             animate={{ backgroundColor: isOpen ? "#d4ebf7" : "#e0f7ff" }}
             whileHover={{ scale: 1.02 }}
@@ -83,7 +83,7 @@ const FAQ = () => {
                     transition={{ duration: 0.5 }}
                 >
                     <motion.span
-                        className="bg-green-200 px-4 py-1 rounded inline-block"
+                        className="bg-gradient-to-br from-yellow-100 via-yellow-150 to-yellow-200 px-4 py-1 rounded inline-block"
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                     >
@@ -102,7 +102,7 @@ const FAQ = () => {
                         transition={{ duration: 0.3 }}
                     >
                         <motion.img 
-                            src="/src/assets/images/fa.png" 
+                            src="/src/assets/images/freq.svg" 
                             alt="FAQ Illustration" 
                             className="w-full max-w-md h-auto object-contain"
                             initial={{ opacity: 0 }}
