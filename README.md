@@ -37,6 +37,7 @@
   - [Backend Setup](#backend-setup)
 - [Usage](#usage)
 - [Demo](#demo)
+- [Technical Demo](#technical-demo)
 - [Screenshots](#screenshots)
 - [Contributing](#contributing)
 - [License](#license)
@@ -48,10 +49,12 @@ CarePlus is an innovative healthcare management system that leverages AI to prov
 
 ## Key Features
 
-- **User Role-Based Access**: Separate signup and login processes for patients and doctors.
+- **User Authentication**: Signup and login processes for all users.
+- **User Role based Access**: Different action for users based on thier role.
 - **Doctor Profile Management**: Allows doctors to create and manage their professional profiles.
-- **Symptom Analysis**: Utilizes Gemini AI to analyze patient symptoms and provide tailored advice.
-- **Severity Assessment**: Categorizes health issues as mild, severe, or extreme, with appropriate responses for each level.
+- **Patient Illness Analysis**: Allows patients to submit their illness with natural langauge description.
+- **Symptom Analysis**: Utilizes LLMs to analyze patient symptoms and provide tailored advice.
+- **Severity Assessment**: Categorizes health issues as mild, severe, or extreme, and grant access to different components based on polciy.
 - **Immediate Remedies**: Offers medication suggestions, home remedies, and precautions based on symptom severity.
 - **Doctor Recommendations**: Matches patients with suitable doctors based on their symptoms and doctor specialties.
 - **Real-time Policy Enforcement**: Implements OPAL for dynamic access control and policy management.
@@ -61,7 +64,7 @@ CarePlus is an innovative healthcare management system that leverages AI to prov
 - **Frontend**: React
 - **Backend**: FastAPI
 - **Database**: SQLite
-- **AI Integration**: Google Gemini API
+- **AI Integration**: Google Gemini 
 - **Authorization**: OPAL (Open Policy Administration Layer)
 - **Containerization**: Docker
 - **Authentication**: JWT (JSON Web Tokens)
@@ -138,7 +141,7 @@ git clone https://github.com/rajesh-adk-137/CarePlus.git
 4. Initialize Policies folder as a Git repository (For Opal configuration):
 
    ```bash
-   cd Policies
+   cd policies
    git init
    git add .
    git commit -m "Initial commit"
@@ -185,22 +188,44 @@ git clone https://github.com/rajesh-adk-137/CarePlus.git
    - View doctor recommendations based on your symptoms.
 5. For doctors:
    - Create and manage your professional profile.
-   - View patient inquiries and respond to them.
+   - Patient can contact you through the public email you added in your profile.
 
 ## Demo
 
-<video src="https://dummy-link-to-video.com/demo.mp4" controls></video>
+<video src="https://github.com/rajesh-adk-137/CarePlus/assets/89499267/d24c8ff7-2614-414b-b85f-5ef1a7979360" controls></video>
+
+## Technical Demo
 
 ## Screenshots
 
 Landing Page:
-![Landing](https://dummy-link-to-screenshot.com/landing.png)
-Home Page:
-![Home](https://dummy-link-to-screenshot.com/home.png)
-Symptom Analysis:
-![Symptom Analysis](https://dummy-link-to-screenshot.com/symptom-analysis.png)
-Doctor Profile:
-![Doctor Profile](https://dummy-link-to-screenshot.com/doctor-profile.png)
+![landing_page](https://github.com/rajesh-adk-137/CarePlus/assets/89499267/93a13d24-d000-47fc-896e-5ad84e995f24)
+about Page:
+![about_page](https://github.com/rajesh-adk-137/CarePlus/assets/89499267/8cdc8d93-e75e-424b-884b-a0a1b25bdd7a)
+
+about app:
+![about_app](https://github.com/rajesh-adk-137/CarePlus/assets/89499267/29c97ff9-ff00-429f-ae19-798aa75d630e)
+
+response for mild cases:
+![response_for_mild_case](https://github.com/rajesh-adk-137/CarePlus/assets/89499267/00af038e-1c78-425e-94e0-b9672962e0dd)
+
+response for severe cases:
+![response_for_severe_case](https://github.com/rajesh-adk-137/CarePlus/assets/89499267/a382886f-e120-4ea3-90a8-ccfc7cd1865b)
+
+response for extreme cases:
+![response_for_extreme_case](https://github.com/rajesh-adk-137/CarePlus/assets/89499267/8dd4e801-99d1-4d12-b00c-2868085185cd)
+
+
+doctor card:
+![doctor_card](https://github.com/rajesh-adk-137/CarePlus/assets/89499267/35073fe6-8a9f-4c9e-827b-9a26e6d5f745)
+
+illness form:
+![illness_form](https://github.com/rajesh-adk-137/CarePlus/assets/89499267/5e9851b2-7585-4123-91c9-9789e509dc55)
+
+
+doctor form:
+![doctor_form](https://github.com/rajesh-adk-137/CarePlus/assets/89499267/6ed7dc7a-e034-48b5-9d9c-1c968a7dfd79)
+
 
 ## Contributing
 
