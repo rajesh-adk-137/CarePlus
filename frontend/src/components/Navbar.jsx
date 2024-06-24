@@ -81,7 +81,7 @@ const Navbar = () => {
                         ) : (
                             <NavItem icon={<FaSignInAlt />} text="Login" to="/auth" mobile />
                         )}
-                        <a href="https://github.com/yourusername/yourrepo" target="_blank" rel="noopener noreferrer" className="block py-2">
+                        <a href="https://github.com/rajesh-adk-137/CarePlus.git" target="_blank" rel="noopener noreferrer" className="block py-2">
                             <FaGithub size={24} className="inline mr-2" /> GitHub
                         </a>
                     </div>
