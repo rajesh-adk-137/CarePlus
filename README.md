@@ -45,19 +45,27 @@
 
 ## Overview
 
-CarePlus is an innovative healthcare management system that leverages AI to provide personalized medical advice and connect patients with appropriate healthcare professionals. The system caters to both patients and doctors, offering a seamless experience for symptom analysis, severity assessment, and doctor-patient communication.
+CarePlus is an innovative AI-powered healthcare management system designed to bridge the gap between patients and healthcare providers. By leveraging advanced technologies such as Google Gemini AI for symptom analysis and OPAL (Open Policy Administration Layer) for dynamic access control, CarePlus offers a comprehensive solution for personalized medical advice and efficient doctor-patient connections. The system caters to both patients seeking immediate health guidance and doctors looking to manage their professional profiles, all within a secure and policy-driven environment. With its user-friendly interface built on React and a robust FastAPI backend, CarePlus aims to revolutionize healthcare accessibility and management in the digital age.
 
 ## Key Features
 
-- **User Authentication**: Signup and login processes for all users.
-- **User Role based Access**: Different action for users based on thier role.
-- **Doctor Profile Management**: Allows doctors to create and manage their professional profiles.
-- **Patient Illness Analysis**: Allows patients to submit their illness with natural langauge description.
-- **Symptom Analysis**: Utilizes LLMs to analyze patient symptoms and provide tailored advice.
-- **Severity Assessment**: Categorizes health issues as mild, severe, or extreme, and grant access to different components based on polciy.
-- **Immediate Remedies**: Offers medication suggestions, home remedies, and precautions based on symptom severity.
-- **Doctor Recommendations**: Matches patients with suitable doctors based on their symptoms and doctor specialties.
-- **Real-time Policy Enforcement**: Implements OPAL for dynamic access control and policy management.
+### AI-Powered Symptom Analysis and Severity Assessment 
+CarePlus leverages Google Gemini AI to analyze patient-reported symptoms, considering factors like age, gender, symptoms, duration and discomfort level. The AI provides a comprehensive assessment, including potential causes, severity classification (mild, severe, or extreme), and tailored advice. This feature offers patients quick, preliminary insights into their health status, aiding in informed decision-making about seeking further medical attention.
+
+### Dynamic Access Control with OPAL Integration
+CarePlus integrates OPAL (Open Policy Administration Layer) for real-time, context-aware access control. This system enables dynamic adjustment of user access based on roles, symptom severity, and current policies, without requiring application restarts. For example, OPAL controls which components (like immediate remedies or doctor recommendations) are accessible to users based on their condition's severity, ensuring appropriate management of sensitive information and critical actions.
+
+### Personalized Healthcare Recommendations
+Based on AI analysis and severity assessment, CarePlus offers personalized healthcare advice. For mild cases, it suggests immediate remedies and home care. Severe cases receive more comprehensive guidance and connections to medical professionals. Extreme cases prompt urgent care instructions. This tiered approach ensures users receive appropriate care guidance for their specific situation.
+
+### Intelligent Doctor-Patient Matching
+CarePlus features a system that matches patients with healthcare providers based on symptom nature and severity. It maintains detailed doctor profiles and highlights professionals whose expertise aligns with patient needs. This intelligent matching streamlines the healthcare-seeking experience, potentially reducing time to treatment and improving patient outcomes.
+
+### Comprehensive Doctor Profile Management
+Healthcare professionals can create and manage detailed profiles within CarePlus, including specializations and qualifications. Doctors can specify their field of expertise, upload profile pictures, and provide contact information. This feature facilitates accurate doctor-patient matching and builds patient confidence in healthcare provider credentials.
+
+### Secure and Role-Based User Authentication 
+CarePlus implements robust authentication, distinguishing between patient and doctor roles from signup. Combined with OPAL's policy enforcement, this ensures users access only relevant features and information. For instance, doctors can manage profiles and get messages in their public email, while patients submit symptoms and receive personalized advice. This approach enhances platform security and provides a tailored user experience.
 
 ## Technologies Used
 
@@ -192,9 +200,11 @@ git clone https://github.com/rajesh-adk-137/CarePlus.git
 
 ## Demo
 
-<video src="https://github.com/rajesh-adk-137/CarePlus/assets/89499267/d24c8ff7-2614-414b-b85f-5ef1a7979360" controls></video>
+[Click here to watch the demo video](https://github.com/rajesh-adk-137/CarePlus/assets/89499267/d24c8ff7-2614-414b-b85f-5ef1a7979360)
 
 ## Technical Demo
+
+[Click here to watch the technical demo video](https://github.com/rajesh-adk-137/CarePlus/assets/89499267/c0823003-73ff-4b60-babc-b5daa3b38882)
 
 ## Screenshots
 

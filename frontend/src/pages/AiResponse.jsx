@@ -28,7 +28,7 @@ const AiResponse = () => {
     } else {
       const checkPolicies = async () => {
         try {
-          const resources = ['combined_response', 'doctor_card', 'extreme_response'];
+          const resources = ['combined_response','doctor_card', 'extreme_response'];
           const promises = resources.map(resource =>
             axios.post('http://localhost:8000/policy_verification', {
               severity: severity,
@@ -72,7 +72,7 @@ const AiResponse = () => {
       <>
         {allowedResources.combinedResponse && <CombinedResponse responsedData={responsedData} />}
         {allowedResources.extremeResponse  && <ExtremeResponse responsedData={responsedData} />}
-        {allowedResources.doctorCard && severity !== 'mild' && (
+        {allowedResources.doctorCard && (
           <Box mt={4}>
             <DoctorsList responsedData={responsedData} />
           </Box>
