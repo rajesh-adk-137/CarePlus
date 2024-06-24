@@ -45,7 +45,7 @@ const FillUp = () => {
         navigate(`/response`, { state: { responsedData } });
       }
     } catch (err) {
-      setError('Failed to submit symptoms. Please try again.');
+      setError('Failed to submit symptoms. Please verify login.');
     } finally {
       setLoading(false);
     }
