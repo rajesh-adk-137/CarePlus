@@ -50,7 +50,7 @@ const Navbar = () => {
                         ) : (
                             <NavItem icon={<FaSignInAlt />} text="Login" to="/auth" />
                         )}
-                        <a href="https://github.com/yourusername/yourrepo" target="_blank" rel="noopener noreferrer">
+                        <a href="https://github.com/rajesh-adk-137/CarePlus.git" target="_blank" rel="noopener noreferrer">
                             <motion.button whileHover={{ scale: 1.05 }} className="text-white">
                                 <FaGithub size={24} />
                             </motion.button>
