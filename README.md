@@ -111,7 +111,7 @@ git clone https://github.com/rajesh-adk-137/CarePlus.git
 
 ### Backend Setup
 
-1. Ensure you have Docker installed on your system and running. Windows users may install Docker Desktop.
+1. Ensure you have Docker installed on your system and RUNNING. Windows users may install Docker Desktop.
 
 2. Navigate to the backend directory:
 
@@ -121,7 +121,7 @@ git clone https://github.com/rajesh-adk-137/CarePlus.git
 
 3. Setting up a virtual environment (recommended):
 
-   - Install virtualenv if you haven't already:
+   - Install virtualenv:
 
      ```bash
      pip install virtualenv
@@ -168,7 +168,7 @@ git clone https://github.com/rajesh-adk-137/CarePlus.git
 
    Replace `YOUR_GEMINI_API_KEY` with your actual Gemini API key.
 
-6. Build and start the Docker containers from backend directory:
+6. Build and start the Docker containers from backend directory (this may take a few minutes):
 
    ```bash
    docker compose up --build
